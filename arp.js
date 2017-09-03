@@ -2,6 +2,6 @@ var arpscanner = require('arpscan');
 arpscanner(onResult);
 
 function onResult(err, data){
-    if(err) throw err;
+    if(err) console.console.log(err);
     console.log(data);
 }
