@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "arpscan": "^0.5.0"
+    "arpscan": "^0.5.0",
+    "express": "^4.15.4"
   }
 }
