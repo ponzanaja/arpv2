@@ -5,7 +5,7 @@ const {exec} = require('child_process')
 var dataGet = ""
 var online = ""
 var ipNow = ""
-exec('/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'', (err,stdout,stderr) =>{
+exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
   if(err){
     //mean they have error
     return
