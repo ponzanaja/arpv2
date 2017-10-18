@@ -43,6 +43,7 @@ async function getOnline(ip){
     }
 
   dataGet = `${stdout}`
+  console.log(dataGet)
 
   let indexOfuser = dataGet.lastIndexOf("(")
   let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
