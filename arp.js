@@ -36,7 +36,7 @@ async function getOnline(ip){
   console.log("We're @ online ")
   console.log('nmap -sP '+ ipNow +'/24')
   console.log(ipNow)
-  await exec("nmap -sP "+ ipNow +"24, (err,stdout,stderr)" =>{
+  await exec("nmap -sP "+ ipNow +"/24, (err,stdout,stderr)" =>{
     if(err){
       //mean they have error
       return
