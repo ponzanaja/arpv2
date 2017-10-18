@@ -6,8 +6,13 @@ var dataGet = ""
 var online = ""
 var ipNow = ""
 
+setInterval(() => {
+ console.log("We're Here now @ setInterval")
+showResult()
+}, 10000)
 
 async function showResult(){
+    console.log("We're Get in show result now")
   var a = await getIP();
   var b = await getOnline(a);
   console.log(b);
@@ -21,13 +26,16 @@ function getIP(){
         //mean they have error
         return
       }
-      console.log(ipNow)
-      return ipNow = `${stdout}`
+      ipNow = `${stdout}`
+      return ipNow
 
     })
 }
 
 function getOnline(ip){
+  console.log("We're @ online ")
+  console.log('nmap -sP '+ ip +'/24')
+  console.log(ip)
   exec('nmap -sP '+ ip +'/24', (err,stdout,stderr) =>{
     if(err){
       //mean they have error
