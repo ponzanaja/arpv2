@@ -60,7 +60,7 @@ const port = 3000;
 
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
-  response.send(ipNow + "ออนไลน์ user" + online;
+  response.send(ipNow + "ออนไลน์ user" + online);
   
 
 });
