@@ -33,17 +33,17 @@ async function getIP(){
 }
 
 async function getOnline(ip){
-  console.log("We're @ online ")
-  console.log('nmap -sP '+ ipNow +'/24')
-  console.log(ipNow)
-  await exec("nmap -sP "+ ipNow +"/24, (err,stdout,stderr)" =>{
+
+  console.log("This Is IP Parameter " +ip)
+        console.log("This is IP from global "+ ipNow )
+  await exec("nmap -sP "+ ipNow +"/24", (err,stdout,stderr) =>{
     if(err){
       //mean they have error
       return
     }
-  
-   await dataGet = `${stdout}`
-   await console.log(dataget);
+
+        dataGet = `${stdout}`
+        console.log(dataGet)
 
   let indexOfuser = dataGet.lastIndexOf("(")
   let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
@@ -63,7 +63,7 @@ const port = 3000;
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
   response.send(ipNow + "ออนไลน์ user" + online);
-  
+
 
 });
 
