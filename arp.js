@@ -34,9 +34,9 @@ function getIP(){
 
 function getOnline(ip){
   console.log("We're @ online ")
-  console.log('nmap -sP '+ ip +'/24')
-  console.log(ip)
-  exec('nmap -sP '+ ip +'/24', (err,stdout,stderr) =>{
+  console.log('nmap -sP '+ ipNow +'/24')
+  console.log(ipNow)
+  exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
     if(err){
       //mean they have error
       return
