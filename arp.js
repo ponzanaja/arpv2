@@ -13,15 +13,15 @@ showResult()
 
 async function showResult(){
     console.log("We're Get in show result now")
-  var a = await getIP();
-  var b = await getOnline(a);
+  let a = await getIP();
+  let b = await getOnline(a);
   console.log(b);
 
 }
 
 
-function getIP(){
-  exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
+async function getIP(){
+  await exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
       if(err){
         //mean they have error
         return
@@ -32,11 +32,11 @@ function getIP(){
     })
 }
 
-function getOnline(ip){
+async function getOnline(ip){
   console.log("We're @ online ")
   console.log('nmap -sP '+ ipNow +'/24')
   console.log(ipNow)
-  exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
+  await exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
     if(err){
       //mean they have error
       return
@@ -44,8 +44,8 @@ function getOnline(ip){
 
   dataGet = `${stdout}`
 
-  var indexOfuser = dataGet.lastIndexOf("(")
-  var onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
+  let indexOfuser = dataGet.lastIndexOf("(")
+  let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
 
   console.log(onlineUser)
   return online = onlineUser
