@@ -36,12 +36,12 @@ async function getOnline(ip){
   console.log("We're @ online ")
   console.log('nmap -sP '+ ipNow +'/24')
   console.log(ipNow)
-  await exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
+  let x = await exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
     if(err){
       //mean they have error
       return
     }
-
+  console.log(x)
   dataGet = `${stdout}`
   console.log(dataGet)
 
