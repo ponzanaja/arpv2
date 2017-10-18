@@ -36,14 +36,14 @@ async function getOnline(ip){
   console.log("We're @ online ")
   console.log('nmap -sP '+ ipNow +'/24')
   console.log(ipNow)
-  let x = await exec('nmap -sP '+ ipNow +'/24', (err,stdout,stderr) =>{
+  await exec("nmap -sP "+ ipNow +"24, (err,stdout,stderr)" =>{
     if(err){
       //mean they have error
       return
     }
-  console.log(x)
-  dataGet = `${stdout}`
- 
+  
+   await dataGet = `${stdout}`
+   await console.log(dataget);
 
   let indexOfuser = dataGet.lastIndexOf("(")
   let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
