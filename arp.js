@@ -23,6 +23,7 @@ setInterval(() => {
 
 
  function getIP(){
+   console.log("We're getting in IP")
    return new Promise((resolve, reject) =>{
      exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
              if(err) reject(err)
@@ -49,8 +50,7 @@ const port = 3000;
 
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
-  response.send();
-
+    response.send(ipNow + "ออนไลน์ user" + online);
 
 });
 
