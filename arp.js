@@ -12,8 +12,8 @@ setInterval(() => {
 }, 10000)
 
  function showResult(){
-  getIP().then(getOnline).then( () => {
-    dataGet = `${stdout}`
+  getIP().then(getOnline).then( (data) => {
+    dataGet = data
     let indexOfuser = dataGet.lastIndexOf("(")
     let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
      online = onlineUser
