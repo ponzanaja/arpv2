@@ -33,15 +33,9 @@ setInterval(() => {
 
  function getOnline(ip){
    console.log("This Is IP Parameter " +ip)
-   let newIP = ip.concat("/24")
-   let nstr = "192.168.1.44/24"
-   let tNewstr = ip.replace(/(\r\n|\n|\r)/gm,"").concat("/24")
-   console.log("text ของไอด้า IP :"+tNewstr);
-   console.log("This is new string of IP : "+newIP)
-   console.log("This is normal output string of : "+nstr)
-   console.log("this is just normal string : 192.168.1.44/24");
+   let newIP = ip.replace(/(\r\n|\n|\r)/gm,"").concat("/24")
    return new Promise((resolve, reject) => {
-    exec('nmap -sP '+ nstr, (err,stdout,stderr) =>{
+    exec('nmap -sP '+ newIP, (err,stdout,stderr) =>{
      if(err) return reject(err)
      else resolve(`${stdout}`)
       })
