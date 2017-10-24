@@ -27,7 +27,7 @@ setInterval(() => {
    return new Promise((resolve, reject) =>{
      exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
              if(err) reject(err)
-             else resole( ipNow = `${stdout}`)
+             else resolve( ipNow = `${stdout}`)
       })
     })
 }
