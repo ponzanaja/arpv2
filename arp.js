@@ -20,7 +20,6 @@ setInterval(() => {
   }).catch((error) => {console.error(error.message)} )
 
 }
-someText = someText.
 
  function getIP(){
    console.log("We're getting in IP")
