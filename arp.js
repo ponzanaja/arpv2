@@ -8,50 +8,38 @@ var ipNow = ""
 
 setInterval(() => {
  console.log("We're Here now @ setInterval")
-showResult()
+ showResult()
 }, 10000)
 
-async function showResult(){
-    console.log("We're Get in show result now")
-  let a = await getIP();
-  let b = await getOnline(a);
-  console.log(b);
+ function showResult(){
+  getIP().then(getOnline).catch((error) => {console.error(error.message)} )
 
 }
 
 
-async function getIP(){
-  await exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
-      if(err){
-        //mean they have error
-        return
-      }
-      ipNow = `${stdout}`
-      return ipNow
-
+ function getIP(){
+   return new Promise((resolve, reject) =>{
+     exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err,stdout,stderr) =>{
+             if(err) reject(err)
+             else resole( ipNow = `${stdout}`)
+      })
     })
 }
 
-async function getOnline(ip){
-
-  console.log("This Is IP Parameter " +ip)
-        console.log("This is IP from global "+ ipNow )
-  await exec("nmap -sP "+ ipNow +"/24", (err,stdout,stderr) =>{
-    if(err){
-      //mean they have error
-      return
-    }
-
-        dataGet = `${stdout}`
-        console.log(dataGet)
-
-  let indexOfuser = dataGet.lastIndexOf("(")
-  let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
-
-  console.log(onlineUser)
-   online = onlineUser
-  return  online
-  })
+ function getOnline(ip){
+   console.log("This Is IP Parameter " +ip)
+   return new Promise((resolve, reject) => {
+    exec("nmap -sP "+ ip +"/24", (err,stdout,stderr) =>{
+     if(err) return reject(err)
+     else{
+       resolve(
+         dataGet = `${stdout}`
+         let indexOfuser = dataGet.lastIndexOf("(")
+         let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
+          online = onlineUser
+        )}
+      })
+    })
 }
 
 
