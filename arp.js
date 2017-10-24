@@ -34,7 +34,7 @@ setInterval(() => {
 
  function getOnline(ip){
    console.log("This Is IP Parameter " +ip)
-   let newIP = ip.concat("/24")
+   let newIP = ip.concat("\/24")
    console.log("This is new string of IP : "+newIP)
 
    return new Promise((resolve, reject) => {
