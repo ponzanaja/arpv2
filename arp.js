@@ -12,7 +12,12 @@ setInterval(() => {
 }, 10000)
 
  function showResult(){
-  getIP().then(getOnline).catch((error) => {console.error(error.message)} )
+  getIP().then(getOnline).then( () => {
+    dataGet = `${stdout}`
+    let indexOfuser = dataGet.lastIndexOf("(")
+    let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
+     online = onlineUser
+  }).catch((error) => {console.error(error.message)} )
 
 }
 
@@ -31,13 +36,7 @@ setInterval(() => {
    return new Promise((resolve, reject) => {
     exec("nmap -sP "+ ip +"/24", (err,stdout,stderr) =>{
      if(err) return reject(err)
-     else{
-       resolve(
-         dataGet = `${stdout}`
-         let indexOfuser = dataGet.lastIndexOf("(")
-         let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
-          online = onlineUser
-        )}
+     else resolve(`${stdout}`)
       })
     })
 }
@@ -50,7 +49,7 @@ const port = 3000;
 
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
-  response.send(ipNow + "ออนไลน์ user" + online);
+  response.send();
 
 
 });
