@@ -34,8 +34,11 @@ setInterval(() => {
 
  function getOnline(ip){
    console.log("This Is IP Parameter " +ip)
+   let newIP = ip.concat("/24")
+   console.log("This is new string of IP : "+newIP)
+
    return new Promise((resolve, reject) => {
-    exec("nmap -sP "+ ip +"/24", (err,stdout,stderr) =>{
+    exec('nmap -sP '+ newIP, (err,stdout,stderr) =>{
      if(err) return reject(err)
      else resolve(`${stdout}`)
       })
