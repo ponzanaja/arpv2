@@ -1,7 +1,28 @@
-const express = require('express');
-const app = express();
+const express = require('express')
+const firebase = require("firebase");
+
+const app = express()
 /* root / root1234 */
 const {exec} = require('child_process')
+
+var config = {
+  apiKey: "AIzaSyCjFxu7Ft4mfHp8ksLYoRkOSWeK4tRmI0w ",
+  authDomain: "showdowndata.firebaseapp.com",
+  databaseURL: "https://showDowndata.firebaseio.com",
+  storageBucket: "showdowndata.appspot.com",
+};
+firebase.initializeApp(config);
+
+var db  = firebase.database().ref('db')
+
+var dbInfo = []
+db.on('child_added', function (snapshot) {
+  var item = snapshot.val()
+  item.id = snapshot.key
+  dbInfo.push(item)
+  console.log(dbInfo)
+})
+
 var dataGet = ""
 var online = ""
 var ipNow = ""
@@ -17,7 +38,7 @@ setInterval(() => {
     let indexOfuser = dataGet.lastIndexOf("(")
     let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
      online = onlineUser
-  }).catch((error) => {console.error(error.message)} )
+  }).then(sendToFirebase("Node 1")).catch((error) => {console.error(error.message)} )
 
 }
 
@@ -42,7 +63,17 @@ setInterval(() => {
     })
 }
 
-
+function sendtoFirebase(nodeName){
+  var sendData =  {
+      node: nodeName,
+      ip: global ipNow,
+      onlinenow: global online
+  }
+  return new Promise((resolve, reject) => {
+    if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
+    else return resolve(db.push(sendData))
+  })
+}
 
 
 // Define port number as 3000
