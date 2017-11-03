@@ -30,6 +30,7 @@ var ipNow = ""
 setInterval(() => {
  console.log("We're Here now @ setInterval")
  showResult()
+ sendtoFirebase("Node1")
 }, 10000)
 
  function showResult(){
@@ -38,8 +39,7 @@ setInterval(() => {
     let indexOfuser = dataGet.lastIndexOf("(")
     let onlineUser = dataGet.slice(indexOfuser+1,indexOfuser+2)
      online = onlineUser
-  }).then(sendToFirebase("Node 1")).catch((error) => {console.error(error.message)} )
-
+  }).catch((error) => {console.error(error.message)} )
 }
 
  function getIP(){
