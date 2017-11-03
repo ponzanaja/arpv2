@@ -66,8 +66,8 @@ setInterval(() => {
 function sendtoFirebase(nodeName){
   var sendData =  {
       node: nodeName,
-      ip: global ipNow,
-      onlinenow: global online
+      ip: ipNow,
+      onlinenow: online
   }
   return new Promise((resolve, reject) => {
     if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
