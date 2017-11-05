@@ -23,6 +23,15 @@ db.on('child_added', function (snapshot) {
   console.log(dbInfo)
 })
 
+db.on('child_changed', function (snapshot) {
+  var id = snapshot.key
+  var sNode = dbInfo.find(info => info.id === id)
+  sNode.node = snapshot.val().node
+  sNode.ip = snapshot.val().ip
+  sNode.onlinenow = snapshot.val().onlinenow
+  console.log( ' CHANGE dbInfo \n ' + dbInfo)
+})
+
 var dataGet = ""
 var online = ""
 var ipNow = ""
@@ -64,15 +73,28 @@ setInterval(() => {
 }
 
 function sendtoFirebase(nodeName){
-  var sendData =  {
-      node: nodeName,
+  var check = dbInfo.find(info => info.node === nodeName)
+
+  if(check){
+    firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
       onlinenow: online
+    })
+  }else {
+    var sendData =  {
+        node: nodeName,
+        ip: ipNow,
+        onlinenow: online
+    }
+    return new Promise((resolve, reject) => {
+      if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
+      else return resolve(db.push(sendData))
+    })
+
   }
-  return new Promise((resolve, reject) => {
-    if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
-    else return resolve(db.push(sendData))
-  })
+
+
+
 }
 
 
