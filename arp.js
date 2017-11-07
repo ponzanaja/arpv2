@@ -5,12 +5,15 @@ const app = express()
 /* root / root1234 */
 const {exec} = require('child_process')
 
-var config = {
-  apiKey: "AIzaSyCjFxu7Ft4mfHp8ksLYoRkOSWeK4tRmI0w ",
-  authDomain: "showdowndata.firebaseapp.com",
-  databaseURL: "https://showDowndata.firebaseio.com",
-  storageBucket: "showdowndata.appspot.com",
-};
+ var config = {
+    apiKey: "AIzaSyCjFxu7Ft4mfHp8ksLYoRkOSWeK4tRmI0w",
+    authDomain: "showdowndata.firebaseapp.com",
+    databaseURL: "https://showdowndata.firebaseio.com",
+    projectId: "showdowndata",
+    storageBucket: "showdowndata.appspot.com",
+    messagingSenderId: "811451470025"
+}
+
 firebase.initializeApp(config);
 
 var db  = firebase.database().ref('db')
