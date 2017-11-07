@@ -184,6 +184,7 @@ function getMIB(nodeName){
       inbound: sumInbound,
       outbound: sumOutbound
     })
+     sumInbound = sumOutbound = 0 
   }
 }
 
