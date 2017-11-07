@@ -113,64 +113,6 @@ function sendtoFirebase(nodeName){
 
 }
 //////////////////////////////////// Getting MIB /////////////////////////////////////////////
-function getMIB(){
-  let info = {} // all data will be here
-  var inbound = []
-  let deviceNetwork = new snmp.Session({ host:'192.168.1.254' })
-  //getInbound
-    deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 10] }, function (err, varbinds) {
-      if (err) {
-        console.log(err)
-      } else {
-          varbinds.forEach((varbind) => {
-            let data = {
-              indexOID: varbind.oid[10],
-              inbound: parseInt(varbind.value / 1048576)
-            }
-            inbound.push(data)
-          })
-          console.log(inbound)
-      }
-  })
-
-  let outbound = []
-  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 16] }, function (err, varbinds) {
-    if (err) {
-      console.log(err)
-    } else {
-        varbinds.forEach((varbind) => {
-          let data = {
-            indexOID: varbind.oid[10],
-            outbound: parseInt(varbind.value / 1048576)
-          }
-          outbound.push(data)
-        })
-        console.log(outbound)
-    }
-})
-
-let intName = []
-let countInterface = 0
-deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 2] }, function (err, varbinds) {
-  if (err) {
-    console.log(err)
-  } else {
-      varbinds.forEach((varbind) => {
-        let data = {
-          indexOID: varbind.oid[10],
-          intName: varbind.value
-        }
-        intName.push(data)
-        if((varbind.value).toString().toLowerCase().charAt(0) === 'f' ||  (varbind.value).toString().toLowerCase().charAt(0) == 'g'){
-          console.log((varbind.value).toString().toLowerCase().charAt(0))
-          countInterface++
-        }
-      })
-      console.log(intName)
-      console.log(countInterface)
-  }
-})
-
 function getMIB(nodeName){
     let info = {} // all data will be here
     var inbound = []
