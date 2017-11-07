@@ -244,28 +244,16 @@ function getMIB(nodeName){
     })
   }
 }
-const port = 3000;
-
-// Routes HTTP GET requests to the specified path "/" with the specified callback function
-app.get('/', function(request, response) {
-    response.send();
-
-});
-
-// Make the app listen on port 3000
-app.listen(port, function() {
-  console.log('Server listening on http://localhost:' + port);
-});
 
 // Define port number as 3000
 const port = 3000;
 
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
-    response.send(ipNow + "ออนไลน์ user" + online);
-});
+    response.send(ipNow + "ออนไลน์ user" + online)
+})
 
 // Make the app listen on port 3000
 app.listen(port, function() {
-  console.log('Server listening on http://localhost:' + port);
-});
+  console.log('Server listening on http://localhost:' + port)
+})
