@@ -250,6 +250,8 @@ const port = 3000;
 app.get('/', function(request, response) {
     response.send();
 
+});
+
 // Make the app listen on port 3000
 app.listen(port, function() {
   console.log('Server listening on http://localhost:' + port);
@@ -261,7 +263,6 @@ const port = 3000;
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function(request, response) {
     response.send(ipNow + "ออนไลน์ user" + online);
-
 });
 
 // Make the app listen on port 3000
