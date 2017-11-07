@@ -84,7 +84,12 @@ function sendtoFirebase(nodeName){
     var sendData =  {
         node: nodeName,
         ip: ipNow,
-        onlinenow: online
+        onlinenow: online,
+        inbound: 0,
+        outbound:0,
+        speedtestUp:0,
+        speedtestDown:0,
+        utilize:0
     }
     return new Promise((resolve, reject) => {
       if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
