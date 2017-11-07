@@ -29,6 +29,11 @@ db.on('child_changed', function (snapshot) {
   sNode.node = snapshot.val().node
   sNode.ip = snapshot.val().ip
   sNode.onlinenow = snapshot.val().onlinenow
+  sNode.inbound = snapshot.val().inbound
+  sNode.outbound = snapshot.val().outbound
+  sNode.speedtestUp = snapshot.val().speedtestUp
+  sNode.speedtestDown = snapshot.val().speedtestDown
+  sNode.utilize = snapshot.val().utilize
   console.log( ' CHANGE dbInfo \n ' + dbInfo)
 })
 
