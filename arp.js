@@ -250,8 +250,6 @@ const port = 3000;
 app.get('/', function(request, response) {
     response.send();
 
-});
-
 // Make the app listen on port 3000
 app.listen(port, function() {
   console.log('Server listening on http://localhost:' + port);
