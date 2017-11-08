@@ -46,18 +46,21 @@ var online = ""
 var ipNow = ""
 var sumInbound = 0
 var sumOutbound = 0
+var download = 0
+var upload = 0
+
 setInterval(() => {
  console.log("We're Here now @ setInterval")
- setTimeout(() =>{
-   speedTest().then((result) =>{
-     console.log(result)
-   })
- },60000)
+
 
  //showResult()
- //sendtoFirebase("Node1")
- //getMIB("Node1")
-}, 10000)
+ //sendtoFirebase("Node1",1)
+ speedTest().then((result) => {
+let newResult = result.replace(/(\r\n|\n|\r)/gm,"")
+console.log(newResult);
+ })
+ //getMIB("Node1",1)
+}, 60000)
 
 
  function showResult(){
@@ -91,7 +94,7 @@ setInterval(() => {
     })
 }
 
-function sendtoFirebase(nodeName){
+function sendtoFirebase(nodeName,value){
   let check = dbInfo.find(info => info.node === nodeName)
 
   if(check){
@@ -196,7 +199,7 @@ function getMIB(nodeName){
 
 function speedTest(){
   return  new Promise((resolve, reject) => {
-   exec('python speedtest-cli.py | grep \'Download:\\|Upload:\'|cut -d: -f2 |awk \'{print $1}\'',{
+   exec('python speedtest-cli | grep \'Download:\\|Upload:\'|cut -d: -f2',{
      cwd: '/project1'
    }, (err,stdout,stderr) =>{
        setTimeout(() => {
