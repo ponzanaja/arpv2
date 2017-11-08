@@ -52,7 +52,7 @@ setInterval(() => {
    speedTest().then((result) =>{
      console.log(result)
    })
- },5000)
+ },60000)
 
  //showResult()
  //sendtoFirebase("Node1")
