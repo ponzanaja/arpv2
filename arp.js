@@ -49,7 +49,7 @@ var sumOutbound = 0
 setInterval(() => {
  console.log("We're Here now @ setInterval")
  speedTest().then((result) =>{
-   result
+   console.log(result)
  })
  //showResult()
  //sendtoFirebase("Node1")
