@@ -53,19 +53,17 @@ setInterval(() => {
  console.log("We're Here now @ setInterval")
 
 
- //showResult()
- //sendtoFirebase("Node1",1)
- speedTest().then((result) => {
-let newResult = result.replace(/(\r\n|\n|\r)/gm,"")
-let indexOfdownload = newResult.indexOf("M")
-let indexOfupload = newResult.indexOf("s")
-let indexOfupload2 =  newResult.lastIndexOf("M")
-download = newResult.slice(0,indexOfdownload)
-upload = newResult.slice(indexOfupload+1,indexOfupload2)
-console.log(download)
-console.log(upload)
- })
- //getMIB("Node1",1)
+ showResult()
+ sendtoFirebase("Node1")
+speedTest().then((result) => {
+  let newResult = result.replace(/(\r\n|\n|\r)/gm,"")
+  let indexOfdownload = newResult.indexOf("M")
+  let indexOfupload = newResult.indexOf("s")
+  let indexOfupload2 =  newResult.lastIndexOf("M")
+  download = newResult.slice(0,indexOfdownload)
+  upload = newResult.slice(indexOfupload+1,indexOfupload2)
+})
+ getMIB("Node1")
 }, 60000)
 
 
@@ -100,13 +98,15 @@ console.log(upload)
     })
 }
 
-function sendtoFirebase(nodeName,value){
+function sendtoFirebase(nodeName){
   let check = dbInfo.find(info => info.node === nodeName)
 
   if(check){
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
-      onlinenow: online
+      onlinenow: online,
+      speedtestUp: upload,
+      speedtestDown: download
     })
   }else {
     let sendData =  {
