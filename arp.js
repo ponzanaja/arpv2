@@ -48,9 +48,12 @@ var sumInbound = 0
 var sumOutbound = 0
 setInterval(() => {
  console.log("We're Here now @ setInterval")
- showResult()
- sendtoFirebase("Node1")
- getMIB("Node1")
+ speedTest().then((result) =>{
+   console.log(result);
+ })
+ //showResult()
+ //sendtoFirebase("Node1")
+ //getMIB("Node1")
 }, 10000)
 
 
@@ -184,10 +187,20 @@ function getMIB(nodeName){
       inbound: sumInbound,
       outbound: sumOutbound
     })
-     sumInbound = sumOutbound = 0 
+    sumInbound = sumOutbound = 0
   }
 }
 
+function speedTest(){
+  return  new Promise((resolve, reject) => {
+   exec('python speedtest-cli.py',{
+     cwd: '/project1'
+   }, (err,stdout,stderr) =>{
+    if(err) return reject(err)
+    else resolve(`${stdout}`)
+     })
+   })
+}
 // Define port number as 3000
 const port = 3000;
 
