@@ -133,7 +133,7 @@ function sendtoFirebase(nodeName){
 function getMIB(nodeName){
     let info = {} // all data will be here
     var inbound = []
-    let deviceNetwork = new snmp.Session({ host:'192.168.1.254' })
+    let deviceNetwork = new snmp.Session({ host:'10.4.15.1' })
     //getInbound
       deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 10] }, function (err, varbinds) {
         if (err) {
