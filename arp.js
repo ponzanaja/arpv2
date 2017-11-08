@@ -62,6 +62,8 @@ speedTest().then((result) => {
   let indexOfupload2 =  newResult.lastIndexOf("M")
   download = newResult.slice(0,indexOfdownload)
   upload = newResult.slice(indexOfupload+1,indexOfupload2)
+    download = download.trim()
+    upload = upload.trim()
 })
  getMIB("Node1")
 }, 60000)
