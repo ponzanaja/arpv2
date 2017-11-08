@@ -57,7 +57,13 @@ setInterval(() => {
  //sendtoFirebase("Node1",1)
  speedTest().then((result) => {
 let newResult = result.replace(/(\r\n|\n|\r)/gm,"")
-console.log(newResult);
+let indexOfdownload = newResult.indexOf("M")
+let indexOfupload = newResult.indexOf("s")
+let indexOfupload2 =  newResult.lastIndexOf("M")
+download = newResult.slice(0,indexOfdownload)
+upload = newResult.slice(indexOfupload+1,indexOfupload2)
+console.log(download)
+console.log(upload)
  })
  //getMIB("Node1",1)
 }, 60000)
