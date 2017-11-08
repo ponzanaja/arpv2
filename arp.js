@@ -193,7 +193,7 @@ function getMIB(nodeName){
 
 function speedTest(){
   return  new Promise((resolve, reject) => {
-   exec('python speedtest-cli.py | grep \'Download:\|Upload:\'|cut -d: -f2 |awk \'{print $1}\'',{
+   exec('python speedtest-cli.py | grep \'Download:|Upload:\'|cut -d: -f2 |awk \'{print $1}\'',{
      cwd: '/project1'
    }, (err,stdout,stderr) =>{
     if(err) return reject(err)
