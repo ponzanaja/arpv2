@@ -48,9 +48,12 @@ var sumInbound = 0
 var sumOutbound = 0
 setInterval(() => {
  console.log("We're Here now @ setInterval")
- speedTest().then((result) =>{
-   console.log(result)
- })
+ setTimeout(() =>{
+   speedTest().then((result) =>{
+     console.log(result)
+   })
+ },5000)
+
  //showResult()
  //sendtoFirebase("Node1")
  //getMIB("Node1")
@@ -196,8 +199,10 @@ function speedTest(){
    exec('python speedtest-cli.py | grep \'Download:\\|Upload:\'|cut -d: -f2 |awk \'{print $1}\'',{
      cwd: '/project1'
    }, (err,stdout,stderr) =>{
-    if(err) return reject(err)
-    else resolve(`${stdout}`)
+       setTimeout(() => {
+         if(err) return reject(err)
+         else resolve(`${stdout}`)
+       })
      })
    })
 }
