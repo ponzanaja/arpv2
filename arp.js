@@ -63,7 +63,7 @@ setInterval(() => {
  var time = dateFormat(now, "HH:MM:ss")
  /////////////////////// Date Variable End here ////////////////////////
  showResult()
- sendtoFirebase("Node1")
+ sendtoFirebase("Node1",date,time)
 speedTest().then((result) => {
   let newResult = result.replace(/(\r\n|\n|\r)/gm,"")
   let indexOfdownload = newResult.indexOf("M")
@@ -148,7 +148,7 @@ function sendtoFirebase(nodeName){
 
 }
 //////////////////////////////////// Getting MIB /////////////////////////////////////////////
-function getMIB(nodeName){
+function getMIB(nodeName,date,time){
     let info = {} // all data will be here
     var inbound = []
     let deviceNetwork = new snmp.Session({ host:'192.168.1.254' }) // 10.4.15.1 // 192.168.1.254
