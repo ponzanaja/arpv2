@@ -250,20 +250,6 @@ function speedTest(){
    })
 }
 
-function getDate(){
-
-
-  let sendData =  {
-
-  }
-
-  //console.log(sendData);
-
-  db.push(sendData)
-
-
-}
-
 
 // Define port number as 3000
 const port = 3000;
