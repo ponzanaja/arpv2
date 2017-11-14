@@ -136,7 +136,7 @@ function sendtoFirebase(nodeName){
         }],
         speedtestUp:0,
         speedtestDown:0,
-        utilize:0
+        utilize:0,
         packetloss:0
         }
     return new Promise((resolve, reject) => {
