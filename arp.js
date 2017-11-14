@@ -1,6 +1,7 @@
 const express = require('express')
 const firebase = require("firebase");
 const snmp = require('snmp-native')
+const dateFormat = require('dateformat')
 const app = express()
 /* root / root1234 */
 const {exec} = require('child_process')
@@ -40,7 +41,7 @@ db.on('child_changed', function (snapshot) {
 
   console.log( ' CHANGE dbInfo \n ' + dbInfo)
 })
-
+/////////////////////// Network Variable Start here ///////////////////////
 var dataGet = ""
 var online = ""
 var ipNow = ""
@@ -48,11 +49,19 @@ var sumInbound = 0
 var sumOutbound = 0
 var download = 0
 var upload = 0
+/////////////////////// Network Variable End here ///////////////////////
+
+/*----------------------------------------------------------------------*/
+
 
 setInterval(() => {
  console.log("We're Here now @ setInterval")
 
-
+ /////////////////////// Date Variable Start here ///////////////////////
+ var now = new Date()
+ var date = dateFormat(now, "d/m/yyyy")
+ var time = dateFormat(now, "HH:MM:ss")
+ /////////////////////// Date Variable End here ////////////////////////
  showResult()
  sendtoFirebase("Node1")
 speedTest().then((result) => {
@@ -115,11 +124,20 @@ function sendtoFirebase(nodeName){
         node: nodeName,
         ip: ipNow,
         onlinenow: online,
-        inbound: 0,
-        outbound:0,
+        inbound: [{
+            value: 0,
+            date: date,
+            time: time
+        }],
+        outbound:[{
+            value: 0,
+            date: date,
+            time: time
+        }],
         speedtestUp:0,
         speedtestDown:0,
         utilize:0
+        packetloss:0
         }
     return new Promise((resolve, reject) => {
       if(!db.push(sendData)) return reject( "Error can't send data to Firebase")
@@ -133,7 +151,7 @@ function sendtoFirebase(nodeName){
 function getMIB(nodeName){
     let info = {} // all data will be here
     var inbound = []
-    let deviceNetwork = new snmp.Session({ host:'10.4.15.1' })
+    let deviceNetwork = new snmp.Session({ host:'192.168.1.254' }) // 10.4.15.1 // 192.168.1.254
     //getInbound
       deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 10] }, function (err, varbinds) {
         if (err) {
@@ -197,9 +215,23 @@ function getMIB(nodeName){
 
   let check = dbInfo.find(info => info.node === nodeName)
   if(check){
+    let checkInbound = check.inbound
+    let checkOutbound = check.outbound
+    let insertIn = {
+      value: sumInbound,
+      date: date,
+      time: time
+    }
+    let insertIn = {
+      value: sumOutbound,
+      date: date,
+      time: time
+    }
+      checkInbound.push(insertIn)
+      checkOutbound.push(insertOut)
       firebase.database().ref('db/' + check.id).update({
-      inbound: sumInbound,
-      outbound: sumOutbound
+      inbound: checkInbound,
+      outbound: checkOutbound
     })
     sumInbound = sumOutbound = 0
   }
@@ -217,6 +249,22 @@ function speedTest(){
      })
    })
 }
+
+function getDate(){
+
+
+  let sendData =  {
+
+  }
+
+  //console.log(sendData);
+
+  db.push(sendData)
+
+
+}
+
+
 // Define port number as 3000
 const port = 3000;
 
