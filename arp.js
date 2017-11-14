@@ -222,7 +222,7 @@ function getMIB(nodeName){
       date: date,
       time: time
     }
-    let insertIn = {
+    let insertOut = {
       value: sumOutbound,
       date: date,
       time: time
