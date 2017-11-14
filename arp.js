@@ -74,7 +74,7 @@ speedTest().then((result) => {
     download = download.trim()
     upload = upload.trim()
 })
- getMIB("Node1")
+ getMIB("Node1",date,time)
 }, 60000)
 
 
@@ -109,7 +109,7 @@ speedTest().then((result) => {
     })
 }
 
-function sendtoFirebase(nodeName){
+function sendtoFirebase(nodeName,date,time){
   let check = dbInfo.find(info => info.node === nodeName)
 
   if(check){
