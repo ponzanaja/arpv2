@@ -195,7 +195,7 @@ function getMIB(nodeName,date,time){
         varbinds.forEach((varbind) => {
           let data = {
             indexOID: varbind.oid[10],
-            value: varbind.value
+            pktsinu: varbind.value
           }
           packetinU.push(data)
         })
@@ -212,7 +212,7 @@ function getMIB(nodeName,date,time){
         varbinds.forEach((varbind) => {
           let data = {
             indexOID: varbind.oid[10],
-            value: varbind.value
+            pktsinnu: varbind.value
           }
           packetinNU.push(data)
         })
@@ -229,7 +229,7 @@ function getMIB(nodeName,date,time){
         varbinds.forEach((varbind) => {
           let data = {
             indexOID: varbind.oid[10],
-            value: varbind.value
+            pktsinerr: varbind.value
           }
           pktsInErr.push(data)
         })
@@ -246,7 +246,7 @@ function getMIB(nodeName,date,time){
         varbinds.forEach((varbind) => {
           let data = {
             indexOID: varbind.oid[10],
-            value: varbind.value
+            pktsouterr: varbind.value
           }
           pktsOutErr.push(data)
         })
@@ -278,9 +278,9 @@ function getMIB(nodeName,date,time){
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
-         suminpktU += packetinU[i].value
-         suminpktNU += packetinNU[i].value
-         suminpktsErr += pktsInErr[i].value
+         suminpktU += packetinU[i].pktsinu
+         suminpktNU += packetinNU[i].pktsinnu
+         suminpktsErr += pktsInErr[i].pktsinerr
        }
        sumInpkts = suminpktU + suminpktNU
        packetloss = (suminpktsErr/sumInpkts)*100
