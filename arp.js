@@ -49,7 +49,8 @@ var sumInbound = 0
 var sumOutbound = 0
 var download = 0
 var upload = 0
-var sumInpacket = 0
+var sumInpkts = 0
+var packetloss = 0
 /////////////////////// Network Variable End here ///////////////////////
 
 /*----------------------------------------------------------------------*/
@@ -219,6 +220,39 @@ function getMIB(nodeName,date,time){
     }
   })
 
+  // getPktsInErr
+  let  pktsInErr = []
+  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 14] }, function (err, varbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        varbinds.forEach((varbind) => {
+          let data = {
+            indexOID: varbind.oid[10],
+            value: varbind.value
+          }
+          pktsInErr.push(data)
+        })
+      //  console.log(pktsInErr) out commend for checking data
+    }
+  })
+
+  // getPktsOutErr
+  let  pktsOutErr = []
+  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 14] }, function (err, varbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        varbinds.forEach((varbind) => {
+          let data = {
+            indexOID: varbind.oid[10],
+            value: varbind.value
+          }
+          pktsOutErr.push(data)
+        })
+      //  console.log(packetinU) out commend for checking data
+    }
+  })
 
   let intName = []
   let countInterface = 0
@@ -240,16 +274,20 @@ function getMIB(nodeName,date,time){
         console.log("Total interface is :" + countInterface)
     }
 
-    let suminpktU = suminpktNU = 0
+    let suminpktU = suminpktNU = suminpktsErr = 0
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
          suminpktU += packetinU[i].value
          suminpktNU += packetinNU[i].value
+         suminpktsErr += pktsInErr[i].value
        }
-       sumInpacket = suminpktU + suminpktNU
+       sumInpkts = suminpktU + suminpktNU
+       packetloss = (suminpktsErr/sumInpkts)*100
   console.log("Sum inbound : " + sumInbound)
-  console.log("Sum PacketIn :" + sumInpacket);
+  console.log("Sum PacketIn :" + sumInpkts)
+  console.log("Packetloss : " + packetloss)
+
   })
 
   let check = dbInfo.find(info => info.node === nodeName)
