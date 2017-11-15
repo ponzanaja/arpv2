@@ -283,7 +283,11 @@ function getMIB(nodeName,date,time){
          suminpktsErr += pktsInErr[i].pktsinerr
        }
        sumInpkts = suminpktU + suminpktNU
+      if(sumInpkts != 0){
        packetloss = (suminpktsErr/sumInpkts)*100
+      }else {
+          packetloss = 0
+      }
   console.log("Sum inbound : " + sumInbound)
   console.log("Sum PacketIn :" + sumInpkts)
   console.log("Packetloss : " + packetloss)
