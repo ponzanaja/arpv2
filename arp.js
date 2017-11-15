@@ -304,13 +304,15 @@ function getMIB(nodeName,date,time){
       date: date,
       time: time
     }
+
       checkInbound.push(insertIn)
       checkOutbound.push(insertOut)
       firebase.database().ref('db/' + check.id).update({
       inbound: checkInbound,
-      outbound: checkOutbound
+      outbound: checkOutbound,
+      packetloss: packetloss
     })
-    sumInbound = sumOutbound = 0
+    sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktNU = suminpktsErr = 0
   }
 }
 
