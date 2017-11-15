@@ -278,19 +278,19 @@ function getMIB(nodeName,date,time){
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
-         suminpktU += packetinU[i].pktsinu
-         suminpktNU += packetinNU[i].pktsinnu
-         suminpktsErr += pktsInErr[i].pktsinerr
+       //  suminpktU += pac1ketinU[i].pktsinu
+        // suminpktNU += packetinNU[i].pktsinnu
+         // suminpktsErr += pktsInErr[i].pktsinerr
        }
-       sumInpkts = suminpktU + suminpktNU
-      if(sumInpkts != 0){
-       packetloss = (suminpktsErr/sumInpkts)*100
-      }else {
-          packetloss = 0
-      }
+       //sumInpkts = suminpktU + suminpktNU
+     // if(sumInpkts != 0){
+     //  packetloss = (suminpktsErr/sumInpkts)*100
+     // }else {
+    //      packetloss = 0
+    //  }
   console.log("Sum inbound : " + sumInbound)
-  console.log("Sum PacketIn :" + sumInpkts)
-  console.log("Packetloss : " + packetloss)
+ // console.log("Sum PacketIn :" + sumInpkts)
+  //console.log("Packetloss : " + packetloss)
 
   })
 
@@ -314,7 +314,7 @@ function getMIB(nodeName,date,time){
       firebase.database().ref('db/' + check.id).update({
       inbound: checkInbound,
       outbound: checkOutbound,
-      packetloss: packetloss
+    //  packetloss: packetloss
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktNU = suminpktsErr = 0
   }
