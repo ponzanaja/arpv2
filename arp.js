@@ -38,7 +38,7 @@ db.on('child_changed', function (snapshot) {
   sNode.speedtestUp = snapshot.val().speedtestUp
   sNode.speedtestDown = snapshot.val().speedtestDown
   sNode.utilize = snapshot.val().utilize
-
+  sNode.packetloss = snapshot.val().packetloss
   console.log( ' CHANGE dbInfo \n ' + dbInfo)
 })
 /////////////////////// Network Variable Start here ///////////////////////
@@ -49,6 +49,7 @@ var sumInbound = 0
 var sumOutbound = 0
 var download = 0
 var upload = 0
+var sumInpacket = 0
 /////////////////////// Network Variable End here ///////////////////////
 
 /*----------------------------------------------------------------------*/
@@ -150,9 +151,9 @@ function sendtoFirebase(nodeName,date,time){
 //////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB(nodeName,date,time){
     let info = {} // all data will be here
-    var inbound = []
     let deviceNetwork = new snmp.Session({ host:'192.168.1.254' }) // 10.4.15.1 // 192.168.1.254
     //getInbound
+      var inbound = []
       deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 10] }, function (err, varbinds) {
         if (err) {
           console.log(err)
@@ -167,7 +168,7 @@ function getMIB(nodeName,date,time){
             // console.log(inbound) out commend for checking data
         }
     })
-
+    // getOutbound
     let outbound = []
     deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 16] }, function (err, varbinds) {
       if (err) {
@@ -183,6 +184,41 @@ function getMIB(nodeName,date,time){
         //  console.log(outbound) out commend for checking data
       }
   })
+
+  // getPacketU
+  let  packetinU = []
+  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 11] }, function (err, varbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        varbinds.forEach((varbind) => {
+          let data = {
+            indexOID: varbind.oid[10],
+            value: varbind.value
+          }
+          packetinU.push(data)
+        })
+      //  console.log(packetinU) out commend for checking data
+    }
+  })
+
+  // getPacketNU
+  let  packetinNU = []
+  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 12] }, function (err, varbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        varbinds.forEach((varbind) => {
+          let data = {
+            indexOID: varbind.oid[10],
+            value: varbind.value
+          }
+          packetinNU.push(data)
+        })
+      //  console.log(packetinNU) out commend for checking data
+    }
+  })
+
 
   let intName = []
   let countInterface = 0
@@ -204,13 +240,16 @@ function getMIB(nodeName,date,time){
         console.log("Total interface is :" + countInterface)
     }
 
-
+    let suminpktU = suminpktNU = 0
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
+         suminpktU += packetinU[i].value
+         suminpktNU += packetinNU[i].value
        }
-
-  console.log(sumInbound)
+       sumInpacket = suminpktU + suminpktNU
+  console.log("Sum inbound : " + sumInbound)
+  console.log("Sum PacketIn :" + sumInpacket);
   })
 
   let check = dbInfo.find(info => info.node === nodeName)
