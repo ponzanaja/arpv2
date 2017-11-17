@@ -152,7 +152,7 @@ function sendtoFirebase(nodeName,date,time){
 //////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB(nodeName,date,time){
     let info = {} // all data will be here
-    let deviceNetwork = new snmp.Session({ host:'10.4.15.1' }) // 10.4.15.1 // 192.168.1.254
+    let deviceNetwork = new snmp.Session({ host:'192.168.1.254' }) // 10.4.15.1 // 192.168.1.254
     //getInbound
       var inbound = []
       deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 10] }, function (err, varbinds) {
@@ -270,7 +270,7 @@ function getMIB(nodeName,date,time){
             countInterface++
           }
         })
-        //console.log(intName) out commend for checking data
+        // console.log(intName)  // out commend for checking data
         console.log("Total interface is :" + countInterface)
     }
 
@@ -278,19 +278,19 @@ function getMIB(nodeName,date,time){
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
-       //  suminpktU += pac1ketinU[i].pktsinu
-        // suminpktNU += packetinNU[i].pktsinnu
-         // suminpktsErr += pktsInErr[i].pktsinerr
+         suminpktU += pac1ketinU[i].pktsinu
+         suminpktNU += packetinNU[i].pktsinnu
+         suminpktsErr += pktsInErr[i].pktsinerr
        }
-       //sumInpkts = suminpktU + suminpktNU
-     // if(sumInpkts != 0){
-     //  packetloss = (suminpktsErr/sumInpkts)*100
-     // }else {
-    //      packetloss = 0
-    //  }
+       sumInpkts = suminpktU + suminpktNU
+      if(sumInpkts != 0){
+       packetloss = (suminpktsErr/sumInpkts)*100
+      }else {
+          packetloss = 0
+      }
   console.log("Sum inbound : " + sumInbound)
- // console.log("Sum PacketIn :" + sumInpkts)
-  //console.log("Packetloss : " + packetloss)
+  console.log("Sum PacketIn :" + sumInpkts)
+  console.log("Packetloss : " + packetloss)
 
   })
 
@@ -314,7 +314,7 @@ function getMIB(nodeName,date,time){
       firebase.database().ref('db/' + check.id).update({
       inbound: checkInbound,
       outbound: checkOutbound,
-    //  packetloss: packetloss
+     packetloss: packetloss
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktNU = suminpktsErr = 0
   }
