@@ -76,7 +76,7 @@ speedTest().then((result) => {
     download = download.trim()
     upload = upload.trim()
 })
- getMIB("Node1",date,time)
+ getMIB("Node2",date,time)
 }, 60000)
 
 
