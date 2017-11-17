@@ -278,7 +278,7 @@ function getMIB(nodeName,date,time){
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
-         suminpktU += pac1ketinU[i].pktsinu
+         suminpktU += packetinU[i].pktsinu
          suminpktNU += packetinNU[i].pktsinnu
          suminpktsErr += pktsInErr[i].pktsinerr
        }
