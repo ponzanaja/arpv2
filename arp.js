@@ -203,23 +203,6 @@ function getMIB(nodeName,date,time){
     }
   })
 
-  // getPacketNU
-  let  packetinNU = []
-  deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 12] }, function (err, varbinds) {
-    if (err) {
-      console.log(err)
-    } else {
-        varbinds.forEach((varbind) => {
-          let data = {
-            indexOID: varbind.oid[10],
-            pktsinnu: varbind.value
-          }
-          packetinNU.push(data)
-        })
-      //  console.log(packetinNU) out commend for checking data
-    }
-  })
-
   // getPktsInErr
   let  pktsInErr = []
   deviceNetwork.getSubtree({ oid: [1, 3, 6, 1, 2, 1, 2, 2, 1, 14] }, function (err, varbinds) {
@@ -274,15 +257,14 @@ function getMIB(nodeName,date,time){
         console.log("Total interface is :" + countInterface)
     }
 
-    let suminpktU = suminpktNU = suminpktsErr = 0
+    let suminpktU  = suminpktsErr = 0
       for (var i = 0; i < countInterface; i++) {
          sumInbound += inbound[i].inbound
          sumOutbound += outbound[i].outbound
          suminpktU += packetinU[i].pktsinu
-         suminpktNU += packetinNU[i].pktsinnu
          suminpktsErr += pktsInErr[i].pktsinerr
        }
-       sumInpkts = suminpktU + suminpktNU
+       sumInpkts = suminpktU 
       if(sumInpkts != 0){
        packetloss = (suminpktsErr/sumInpkts)*100
       }else {
@@ -316,7 +298,7 @@ function getMIB(nodeName,date,time){
       outbound: checkOutbound,
      packetloss: packetloss
     })
-    sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktNU = suminpktsErr = 0
+    sumInbound = sumOutbound = sumInpkts = suminpktU  = suminpktsErr = 0
   }
 }
 
