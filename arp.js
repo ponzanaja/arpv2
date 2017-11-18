@@ -24,13 +24,12 @@ db.on('child_added', function (snapshot) {
   var item = snapshot.val()
   item.id = snapshot.key
   dbInfo.push(item)
-  console.log(dbInfo)
 })
  // checking for update from firebase
 db.on('child_changed', function (snapshot) {
   var id = snapshot.key
   var sNode = dbInfo.find(info => info.id === id)
-  sNode.node = snapshot.val().node
+  /*sNode.node = snapshot.val().node
   sNode.ip = snapshot.val().ip
   sNode.onlinenow = snapshot.val().onlinenow
   sNode.inbound = snapshot.val().inbound
@@ -39,7 +38,7 @@ db.on('child_changed', function (snapshot) {
   sNode.speedtestDown = snapshot.val().speedtestDown
   sNode.utilize = snapshot.val().utilize
   sNode.packetloss = snapshot.val().packetloss
-  console.log( ' CHANGE dbInfo \n ' + dbInfo)
+  console.log( ' CHANGE dbInfo \n ' + dbInfo)*/
 })
 /////////////////////// Network Variable Start here ///////////////////////
 var dataGet = ""
@@ -57,8 +56,6 @@ var packetloss = 0
 
 
 setInterval(() => {
- console.log("We're Here now @ setInterval")
-
  /////////////////////// Date Variable Start here ///////////////////////
  var now = new Date()
  var date = dateFormat(now, "d/m/yyyy")
@@ -79,7 +76,6 @@ speedTest().then((result) => {
  getMIB("Node2",date,time)
 }, 60000)
 
-
  function showResult(){
   getIP().then(getOnline).then( (data) => {
     dataGet = data
@@ -88,7 +84,6 @@ speedTest().then((result) => {
      online = onlineUser
   }).catch((error) => {console.error(error.message)} )
 }
-
 
  function getIP(){
    console.log("We're getting in IP")
@@ -113,7 +108,12 @@ speedTest().then((result) => {
 
 function sendtoFirebase(nodeName,date,time){
   let check = dbInfo.find(info => info.node === nodeName)
-
+  let spdtestData = {[
+  valuedown: download,
+  valueup: upload,
+  date: date,
+  time: time
+]}
   if(check){
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
@@ -136,8 +136,12 @@ function sendtoFirebase(nodeName,date,time){
             date: date,
             time: time
         }],
-        speedtestUp:0,
-        speedtestDown:0,
+        ///////////  ///////////////////  ////////   / ////////////// / doing here 
+        spdtestData:[{ 
+           valuedown: download,
+           valueup: upload,
+           date: date,
+           time: time}],
         utilize:0,
         packetloss:0
         }
@@ -254,7 +258,6 @@ function getMIB(nodeName,date,time){
           }
         })
         // console.log(intName)  // out commend for checking data
-        console.log("Total interface is :" + countInterface)
     }
 
     let suminpktU  = suminpktsErr = 0
