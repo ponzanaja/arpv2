@@ -2,7 +2,6 @@ const express = require('express')
 const firebase = require('firebase')
 const snmp = require('snmp-native')
 const dateFormat = require('dateformat')
-const app = express()
 const inboundOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 10]
 const outboundOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 16]
 const packetinUOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 11]
@@ -103,7 +102,7 @@ function getIP () {
 }
 
 function getOnline (ip) {
-  console.log('This Is IP Parameter ' + ip)
+  //console.log('This Is IP Parameter ' + ip)
   let newIP = ip.replace(/(\r\n|\n|\r)/gm, '').concat('/24')
   return new Promise((resolve, reject) => {
     exec('nmap -sP ' + newIP, (err, stdout, stderr) => {
@@ -293,9 +292,9 @@ function getMIB (nodeName, date, time) {
     } else {
       packetloss = 0
     }
-    console.log('Sum inbound : ' + sumInbound)
-    console.log('Sum PacketIn :' + sumInpkts)
-    console.log('Packetloss : ' + packetloss)
+    //console.log('Sum inbound : ' + sumInbound)
+    //console.log('Sum PacketIn :' + sumInpkts)
+    //console.log('Packetloss : ' + packetloss)
   })
 
   let check = dbInfo.find(info => info.node === nodeName)
@@ -336,16 +335,3 @@ function speedTest () {
     })
   })
 }
-
-// Define port number as 3000
-const port = 3000
-
-// Routes HTTP GET requests to the specified path "/" with the specified callback function
-app.get('/', function (request, response) {
-  response.send(ipNow + 'ออนไลน์ user' + online)
-})
-
-// Make the app listen on port 3000
-app.listen(port, function () {
-  console.log('Server listening on http://localhost:' + port)
-})
