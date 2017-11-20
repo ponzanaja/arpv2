@@ -161,7 +161,7 @@ function sendtoFirebase (nodeName, date, time) {
 // ////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB (nodeName, date, time) {
   let deviceNetwork = new snmp.Session({
-    host: '10.4.15.1'
+    host: '192.168.1.254'
   }) // 10.4.15.1 // 192.168.1.254
   // getInbound
   let inbound = []
