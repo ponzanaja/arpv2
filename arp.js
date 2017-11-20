@@ -144,7 +144,7 @@ function sendtoFirebase (nodeName, date, time) {
         date: date,
         time: time
       }],
-      speedtestData: [{
+      speedtest: [{
         valuedown: download,
         valueup: upload,
         date: date,
