@@ -2,6 +2,7 @@ const express = require('express')
 const firebase = require('firebase')
 const snmp = require('snmp-native')
 const dateFormat = require('dateformat')
+//const app = express()
 const inboundOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 10]
 const outboundOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 16]
 const packetinUOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 11]
@@ -66,7 +67,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node1', date, time)
+  sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -311,7 +312,6 @@ function getMIB (nodeName, date, time) {
       date: date,
       time: time
     }
-
     checkInbound.push(insertIn)
     checkOutbound.push(insertOut)
     firebase.database().ref('db/' + check.id).update({
@@ -335,3 +335,17 @@ function speedTest () {
     })
   })
 }
+/*
+// Define port number as 3000
+const port = 3000
+
+// Routes HTTP GET requests to the specified path "/" with the specified callback function
+app.get('/', function (request, response) {
+  response.send(ipNow + 'ออนไลน์ user' + online)
+})
+
+// Make the app listen on port 3000
+app.listen(port, function () {
+  console.log('Server listening on http://localhost:' + port)
+})
+*/
