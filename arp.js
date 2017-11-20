@@ -66,7 +66,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node2', date, time)
+  sendtoFirebase('Node1', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
