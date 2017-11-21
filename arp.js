@@ -342,9 +342,9 @@ function getMIB (nodeName, date, time) {
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
   calculateUtilize(countInterface,inbound,outbound,intSpd,nodeName)
-}
+})}
 
-,function speedTest () {
+function speedTest () {
   return new Promise((resolve, reject) => {
     exec('python speedtest-cli | grep \'Download:\\|Upload:\'|cut -d: -f2', {
       cwd: '/project1'
@@ -357,7 +357,7 @@ function getMIB (nodeName, date, time) {
   })
 }
 
-,function calculateUtilize (countInterface,inbound,outbound,interfaceSpeed,nodeName) {
+function calculateUtilize (countInterface,inbound,outbound,interfaceSpeed,nodeName) {
   let sumUtilizeIn  = 0
   let sumUtilizeOut = 0
   let sumInterface = 0
