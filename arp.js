@@ -9,8 +9,7 @@ const packetinUOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 11]
 const pktsInErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const pktsOutErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const intNameOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 2]
-const nodeNname = 'Node1'
-const nodeNIP = '10.4.15.1'
+const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
 /* root / root1234 */
 const {exec} = require('child_process')
 
@@ -69,7 +68,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase(nodeNname, date, time)
+  sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -80,7 +79,7 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB(nodeNname, date, time)
+  getMIB('Node2', date, time)
 }, 60000)
 
 function showResult () {
@@ -152,7 +151,8 @@ function sendtoFirebase (nodeName, date, time) {
         date: date,
         time: time
       }],
-      utilize: 0,
+      utilizein: 0,
+      utilizeout:0,
       packetloss: 0
     }
     return new Promise((resolve, reject) => {
@@ -164,7 +164,7 @@ function sendtoFirebase (nodeName, date, time) {
 // ////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB (nodeName, date, time) {
   let deviceNetwork = new snmp.Session({
-    host: nodeNIP
+    host: '192.168.1.254'
   }) // 10.4.15.1 // 192.168.1.254
   // getInbound
   let inbound = []
@@ -281,6 +281,24 @@ function getMIB (nodeName, date, time) {
       // console.log(intName)  // out commend for checking data
     }
 
+    let intSpd =  []
+    deviceNetwork.getSubtree({
+      oid: intSpeed
+    }, function (err, letbinds) {
+      if (err) {
+        console.log(err)
+      } else {
+        letbinds.forEach((letbind) => {
+          let data = {
+            indexOID: letbind.oid[10],
+            intSpd: letbind.value
+          }
+          intSpd.push(data)
+        })
+        // console.log(intName)  // out commend for checking data
+      }
+
+
     let suminpktU = 0
     let suminpktsErr = 0
     for (let i = 0; i < countInterface; i++) {
@@ -323,9 +341,10 @@ function getMIB (nodeName, date, time) {
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
+  calculateUtilize(countInterface,inbound,outbound,intSpd,nodeName)
 }
 
-function speedTest () {
+,function speedTest () {
   return new Promise((resolve, reject) => {
     exec('python speedtest-cli | grep \'Download:\\|Upload:\'|cut -d: -f2', {
       cwd: '/project1'
@@ -337,8 +356,32 @@ function speedTest () {
     })
   })
 }
-/*
-// Define port number as 3000
+
+,function calculateUtilize (countInterface,inbound,outbound,interfaceSpeed,nodeName) {
+  let sumUtilizeIn  = 0
+  let sumUtilizeOut = 0
+  let sumInterface = 0
+  
+  for (let i = 0; i < countInterface; i++) {
+    sumInterface += interfaceSpeed[i].intSpd
+  }
+  sumInterface = sumInterface/countInterface
+  let data =  dbInfo.find(info => info.node === nodeName)
+  let inbound1 = data.inbound[data.inbound.length-1].value
+  let inboudn2 = data.inbound[data.inbound.length-2].value
+  let outbound1 = data.outbound[data.outbound.lenghth-1].value
+  let outbound2 = data.outbound[data.outbound.lenghth-2].value
+  let sumIn = ((inbound2 - inbound1)*8)*100 
+  let sumOut = ((outbound2 - outbound1)*8)*100
+  sumIn = sumIn/(60*sumInterface)
+  sumOut = sumOut/(60*sumInterface)
+  firebase.database().ref('db/' + data.id).update({
+    utilizein: sumIn,
+    utilizeout: sumOut
+  })
+}
+
+/* // Define port number as 3000
 const port = 3000
 
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
@@ -349,5 +392,4 @@ app.get('/', function (request, response) {
 // Make the app listen on port 3000
 app.listen(port, function () {
   console.log('Server listening on http://localhost:' + port)
-})
-*/
+}) */
