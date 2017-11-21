@@ -9,6 +9,8 @@ const packetinUOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 11]
 const pktsInErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const pktsOutErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const intNameOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 2]
+const nodeNname = 'Node1'
+const nodeNIP = '10.4.15.1'
 /* root / root1234 */
 const {exec} = require('child_process')
 
@@ -67,7 +69,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node2', date, time)
+  sendtoFirebase(nodeNname, date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -78,7 +80,7 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node2', date, time)
+  getMIB(nodeNname, date, time)
 }, 60000)
 
 function showResult () {
@@ -162,7 +164,7 @@ function sendtoFirebase (nodeName, date, time) {
 // ////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB (nodeName, date, time) {
   let deviceNetwork = new snmp.Session({
-    host: '192.168.1.254'
+    host: nodeNIP
   }) // 10.4.15.1 // 192.168.1.254
   // getInbound
   let inbound = []
