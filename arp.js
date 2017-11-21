@@ -164,7 +164,7 @@ function sendtoFirebase (nodeName, date, time) {
 // ////////////////////////////////// Getting MIB /////////////////////////////////////////////
 function getMIB (nodeName, date, time) {
   let deviceNetwork = new snmp.Session({
-    host: '192.168.1.254'
+    host: nodeNIP
   }) // 10.4.15.1 // 192.168.1.254
   // getInbound
   let inbound = []
@@ -279,26 +279,7 @@ function getMIB (nodeName, date, time) {
         }
       })
       // console.log(intName)  // out commend for checking data
-    })
-    
-
-    let intSpd =  []
-    deviceNetwork.getSubtree({
-      oid: intSpeed
-    }, function (err, letbinds) {
-      if (err) {
-        console.log(err)
-      } else {
-        letbinds.forEach((letbind) => {
-          let data = {
-            indexOID: letbind.oid[10],
-            intSpd: letbind.value
-          }
-          intSpd.push(data)
-        })
-        // console.log(intName)  // out commend for checking data
-      }
-
+    }
 
     let suminpktU = 0
     let suminpktsErr = 0
@@ -317,6 +298,24 @@ function getMIB (nodeName, date, time) {
     //console.log('Sum inbound : ' + sumInbound)
     //console.log('Sum PacketIn :' + sumInpkts)
     //console.log('Packetloss : ' + packetloss)
+  })
+
+  let intSpd =  []
+  deviceNetwork.getSubtree({
+    oid: intSpeed
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+      letbinds.forEach((letbind) => {
+        let data = {
+          indexOID: letbind.oid[10],
+          intSpd: letbind.value
+        }
+        intSpd.push(data)
+      })
+      // console.log(intName)  // out commend for checking data
+    }
   })
 
   let check = dbInfo.find(info => info.node === nodeName)
@@ -344,6 +343,7 @@ function getMIB (nodeName, date, time) {
   }
   calculateUtilize(countInterface,inbound,outbound,intSpd,nodeName)
 }
+
 
 function speedTest () {
   return new Promise((resolve, reject) => {
