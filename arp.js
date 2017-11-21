@@ -342,7 +342,7 @@ function getMIB (nodeName, date, time) {
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
-  calculateUtilize(countInterface,inbound,outbound,intSpd,nodeName)
+  calculateUtilize(countInterface,intSpd,nodeName)
 }
 
 
@@ -359,7 +359,7 @@ function speedTest () {
   })
 }
 
-function calculateUtilize (countInterface,inbound,outbound,interfaceSpeed,nodeName) {
+function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumUtilizeIn  = 0
   let sumUtilizeOut = 0
   let sumInterface = 0
