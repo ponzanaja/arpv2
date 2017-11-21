@@ -377,10 +377,12 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumOut = ((outbound2 - outbound1)*8)*100
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
-  firebase.database().ref('db/' + data.id).update({
+  console.log("SumIn :" + sumIn)
+  console.log("SumOut :" + sumOut)
+  /*firebase.database().ref('db/' + data.id).update({
     utilizein: sumIn,
     utilizeout: sumOut
-  })
+  })*/
 }
 
 /* // Define port number as 3000
