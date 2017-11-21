@@ -279,7 +279,8 @@ function getMIB (nodeName, date, time) {
         }
       })
       // console.log(intName)  // out commend for checking data
-    }
+    })
+    
 
     let intSpd =  []
     deviceNetwork.getSubtree({
@@ -342,7 +343,7 @@ function getMIB (nodeName, date, time) {
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
   calculateUtilize(countInterface,inbound,outbound,intSpd,nodeName)
-})}
+}
 
 function speedTest () {
   return new Promise((resolve, reject) => {
