@@ -58,6 +58,8 @@ let download = 0
 let upload = 0
 let sumInpkts = 0
 let packetloss = 0
+let temparature = 0
+let humanity = 0
 /// //////////////////// Network letiable End here ///////////////////////
 
 /* ---------------------------------------------------------------------- */
@@ -81,6 +83,15 @@ setInterval(() => {
     upload = upload.trim()
   })
   getMIB('Node2', date, time)
+  sendTemparature().then((result) => {
+    let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
+    let indexOfTemparature = newResult.indexOf('H')
+    let indexOfHumanity = newResult.indexOf('T')
+    humanity = newResult.slice(1,indexOfHumanity)
+    temparature = newResult.slice(indexOf('T')+1 )
+    humanity = humanity.trim()
+    temparature = temparature.trim()
+  })
 }, 60000)
 
 function showResult () {
@@ -129,7 +140,9 @@ function sendtoFirebase (nodeName, date, time) {
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
       onlinenow: online,
-      speedtest: spdcheck
+      speedtest: spdcheck,
+      humanity:humanity,
+      temparature:temparature
     })
   } else {
     let sendData = {
@@ -154,7 +167,10 @@ function sendtoFirebase (nodeName, date, time) {
       }],
       utilizein: 0,
       utilizeout:0,
-      packetloss: 0
+      packetloss: 0,
+      humanity:0,
+      temparature:0
+
     }
     return new Promise((resolve, reject) => {
       if (!db.push(sendData)) return Promise.reject(new Error('something bad happened'))
@@ -385,6 +401,18 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   })
 }
 
+function sendTemparature () {
+  return new Promise((resolve, reject) => {
+    exec('sudo ./dht', {
+      cwd: '/project1'
+    }, (err, stdout, stderr) => {
+      setTimeout(() => {
+        if (err) return reject(err)
+        else resolve(`${stdout}`)
+      })
+    })
+  })
+}
 /* // Define port number as 3000
 const port = 3000
 
