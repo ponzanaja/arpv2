@@ -83,7 +83,7 @@ setInterval(() => {
     upload = upload.trim()
   })
   getMIB('Node2', date, time)
-  sendTemparature().then((result) => {
+  /* sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('H')
     let indexOfHumanity = newResult.indexOf('T')
@@ -91,7 +91,7 @@ setInterval(() => {
     temparature = newResult.slice(indexOf('T')+1 )
     humanity = humanity.trim()
     temparature = temparature.trim()
-  })
+  })*/ 
 }, 60000)
 
 function showResult () {
@@ -140,9 +140,9 @@ function sendtoFirebase (nodeName, date, time) {
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
       onlinenow: online,
-      speedtest: spdcheck,
-      humanity:humanity,
-      temparature:temparature
+      speedtest: spdcheck
+      //humanity:humanity,
+     // temparature:temparature
     })
   } else {
     let sendData = {
