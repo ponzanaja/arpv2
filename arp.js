@@ -10,7 +10,7 @@ const pktsInErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const pktsOutErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const intNameOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 2]
 const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
-const nodeNIP = '10.4.15.1'
+const nodeNIP = '192.168.1.254'
 /* root / root1234 */
 const {exec} = require('child_process')
 
@@ -71,7 +71,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node1', date, time)
+  sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -82,8 +82,8 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node1', date, time)
-  /* sendTemparature().then((result) => {
+  getMIB('Node2', date, time)
+   sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('H')
     let indexOfHumanity = newResult.indexOf('T')
@@ -91,7 +91,7 @@ setInterval(() => {
     temparature = newResult.slice(indexOf('T')+1 )
     humanity = humanity.trim()
     temparature = temparature.trim()
-  })*/ 
+  })
 }, 60000)
 
 function showResult () {
@@ -128,6 +128,12 @@ function getOnline (ip) {
 
 function sendtoFirebase (nodeName, date, time) {
   let check = dbInfo.find(info => info.node === nodeName)
+  let temparatureData = {
+    valueh: humanity,
+    valuet: temparature,
+    date: date,
+    time: time 
+  }
   let spdtestData = {
     valuedown: download,
     valueup: upload,
@@ -136,13 +142,14 @@ function sendtoFirebase (nodeName, date, time) {
   }
   if (check) {
     let spdcheck = check.speedtest
+    let temparacheck = check.temparature
     spdcheck.push(spdtestData)
+    temparacheck.push(temparatureData)
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
       onlinenow: online,
-      speedtest: spdcheck
-      //humanity:humanity,
-     // temparature:temparature
+      speedtest: spdcheck,
+      temparature: temparacheck
     })
   } else {
     let sendData = {
@@ -165,11 +172,15 @@ function sendtoFirebase (nodeName, date, time) {
         date: date,
         time: time
       }],
+      temparature: [{
+        valueh: 0,
+        valuet: 0,
+        date: date,
+        time: time
+      }],
       utilizein: 0,
       utilizeout:0,
-      packetloss: 0,
-      humanity:0,
-      temparature:0
+      packetloss: 0
 
     }
     return new Promise((resolve, reject) => {
@@ -393,6 +404,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumOut = ((outbound2 - outbound1)*8)*100
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
+  console.log("Sum In =" + sumIn + "Sum Out = " + sumOut)
   if(isNaN(sumIn)) sumIn = 0
   if(isNaN(sumOut)) sumOut = 0
   firebase.database().ref('db/' + data.id).update({
