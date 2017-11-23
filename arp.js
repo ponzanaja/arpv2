@@ -84,14 +84,14 @@ setInterval(() => {
   })
   getMIB('Node2', date, time)*/
    sendTemparature().then((result) => {
-     console.log("Temp Result : " + result)
-    /*let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
-    let indexOfTemparature = newResult.indexOf('H')
-    let indexOfHumanity = newResult.indexOf('T')
-    humanity = newResult.slice(1,indexOfHumanity)
-    temparature = newResult.slice(indexOf('T')+1 )
+    let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
+
+    let indexOfTemparature = newResult.indexOf('T')
+    humanity = newResult.slice(1,indexOfTemparature)
+    temparature = newResult.slice(indexOfTemparature+1 )
     humanity = humanity.trim()
-    temparature = temparature.trim()*/
+    temparature = temparature.trim()
+    console.log(humanity + " " + temparature)
   })
 }, 60000)
 
