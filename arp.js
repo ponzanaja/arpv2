@@ -70,7 +70,7 @@ setInterval(() => {
   let date = dateFormat(now, 'd/m/yyyy')
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
-  showResult()
+  /*showResult()
   sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
@@ -82,15 +82,16 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node2', date, time)
+  getMIB('Node2', date, time)*/
    sendTemparature().then((result) => {
-    let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
+     console.log("Temp Result : " + result)
+    /*let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('H')
     let indexOfHumanity = newResult.indexOf('T')
     humanity = newResult.slice(1,indexOfHumanity)
     temparature = newResult.slice(indexOf('T')+1 )
     humanity = humanity.trim()
-    temparature = temparature.trim()
+    temparature = temparature.trim()*/
   })
 }, 60000)
 
