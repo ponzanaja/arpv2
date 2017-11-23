@@ -70,7 +70,7 @@ setInterval(() => {
   let date = dateFormat(now, 'd/m/yyyy')
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
-  /*showResult()
+  showResult()
   sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
@@ -82,16 +82,14 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node2', date, time)*/
-   sendTemparature().then((result) => {
+  getMIB('Node2', date, time)
+  sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
-
     let indexOfTemparature = newResult.indexOf('T')
     humanity = newResult.slice(1,indexOfTemparature)
     temparature = newResult.slice(indexOfTemparature+1 )
     humanity = humanity.trim()
     temparature = temparature.trim()
-    console.log(humanity + " " + temparature)
   })
 }, 60000)
 
@@ -110,7 +108,7 @@ function getIP () {
   // console.log("We're getting in IP")
   return new Promise((resolve, reject) => {
     exec('/sbin/ifconfig eth0 | grep \'inet addr:\' | cut -d: -f2 | awk \'{ print $1}\'', (err, stdout, stderr) => {
-      if (err) reject(err)
+      if (err) reject("get IP Error :"+err)
       else resolve(ipNow = `${stdout}`)
     })
   })
@@ -121,7 +119,7 @@ function getOnline (ip) {
   let newIP = ip.replace(/(\r\n|\n|\r)/gm, '').concat('/24')
   return new Promise((resolve, reject) => {
     exec('nmap -sP ' + newIP, (err, stdout, stderr) => {
-      if (err) return reject(err)
+      if (err) return reject("get Online Error : "+err)
       else resolve(`${stdout}`)
     })
   })
@@ -380,7 +378,7 @@ function speedTest () {
       cwd: '/project1'
     }, (err, stdout, stderr) => {
       setTimeout(() => {
-        if (err) return reject(err)
+        if (err) return reject("SpeedTest Error : " + err)
         else resolve(`${stdout}`)
       })
     })
@@ -420,7 +418,7 @@ function sendTemparature () {
       cwd: '/project1'
     }, (err, stdout, stderr) => {
       setTimeout(() => {
-        if (err) return reject(err)
+        if (err) return reject("get Temparature Error : " + err)
         else resolve(`${stdout}`)
       })
     })
