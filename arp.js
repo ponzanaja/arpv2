@@ -10,8 +10,8 @@ const pktsInErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const pktsOutErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const intNameOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 2]
 const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
-const nodeNIP = '10.4.15.1'
-/* root / root1234 */
+const nodeNIP = '192.168.1.254'
+/* root / root1234 10.4.15.1 */ 
 const {exec} = require('child_process')
 
 let config = {
@@ -71,7 +71,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date letiable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node1', date, time)
+  sendtoFirebase('Node2', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -82,7 +82,7 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node1', date, time)
+  getMIB('Node2', date, time)
   sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('T')
