@@ -414,7 +414,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
 
 function sendTemparature () {
   return new Promise((resolve, reject) => {
-    exec('sudo ./dht', {
+    exec('sudo ./dht2', {
       cwd: '/project1'
     }, (err, stdout, stderr) => {
       setTimeout(() => {
