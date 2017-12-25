@@ -396,18 +396,23 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumUtilizeIn  = 0
   let sumUtilizeOut = 0
   let sumInterface = 0
+  let inbound1 = 0
+  let inbound2 = 0
+  let outbound1 = 0
+  let outbound2 = 0
   for (let i = 0; i < countInterface; i++) {
     sumInterface += interfaceSpeed[i].intSpd/1048576
   }
   sumInterface = sumInterface/countInterface
   let data =  dbInfo.find(info => info.node === nodeName)
-  let inbound1 = data.inbound[data.inbound.length-1].value
-  let inbound2 = data.inbound[data.inbound.length-2].value
-  let outbound1 = data.outbound[data.outbound.length-1].value
-  let outbound2 = data.outbound[data.outbound.length-2].value
+   inbound1 = data.inbound[data.inbound.length-1].value
+   inbound2 = data.inbound[data.inbound.length-2].value
+   outbound1 = data.outbound[data.outbound.length-1].value
+   outbound2 = data.outbound[data.outbound.length-2].value
   let sumIn = (inbound2 - inbound1)*100
   let sumOut = (outbound2 - outbound1)*100
-  console.log("Sum In before =" + sumIn + "Sum Out before = " + sumOut)
+    console.log("inbound 2 = " + inbound2 + " inbound1 = " + inbound1)
+
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
   console.log("Sum In after =" + sumIn + "Sum Out after = " + sumOut)
