@@ -373,12 +373,12 @@ function getMIB (nodeName, date, time) {
       packetloss: packetloss
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
-  }console.log("counterInterface2 = "+counterInt)
+  }
   setTimeout(() => {
     console.log("counterInterface = " + countInterface)
     console.log("intSpd = " + JSON.stringify(intSpd))
   calculateUtilize(countInterface,intSpd,nodeName)
-  },2000)
+  },4000)
 }
 
 
@@ -401,6 +401,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumInterface = 0
   for (let i = 0; i < countInterface; i++) {
     sumInterface += interfaceSpeed[i].intSpd/1048576
+    console.log("sumInterface in loop " + i +" = " + sumInterface)
   }
   sumInterface = sumInterface/countInterface
   console.log("suminterface = "+sumInterface)
