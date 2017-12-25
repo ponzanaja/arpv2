@@ -148,7 +148,9 @@ function sendtoFirebase (nodeName, date, time) {
       ip: ipNow,
       onlinenow: online,
       speedtest: spdcheck,
-      temparature: temparacheck
+      temparature: temparacheck,
+      alive:true,
+      alive2:true
     })
   } else {
     let sendData = {
@@ -179,7 +181,9 @@ function sendtoFirebase (nodeName, date, time) {
       }],
       utilizein: 0,
       utilizeout:0,
-      packetloss: 0
+      packetloss: 0,
+      alive: true,
+      alive2: true
 
     }
     return new Promise((resolve, reject) => {
