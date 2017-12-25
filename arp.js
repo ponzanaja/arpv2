@@ -60,6 +60,7 @@ let sumInpkts = 0
 let packetloss = 0
 let temparature = 0
 let humanity = 0
+let counterInt = 0
 /// //////////////////// Network letiable End here ///////////////////////
 
 /* ---------------------------------------------------------------------- */
@@ -307,6 +308,7 @@ function getMIB (nodeName, date, time) {
         intName.push(data)
         if ((letbind.value).toString().toLowerCase().charAt(0) === 'f' || (letbind.value).toString().toLowerCase().charAt(0) === 'g') {
           countInterface++
+          counterInt++
         }
       })
       // console.log(intName)  // out commend for checking data
@@ -371,7 +373,8 @@ function getMIB (nodeName, date, time) {
       packetloss: packetloss
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
-  }console.log("counterInterface1 = "+countInterface)
+  }console.log("counterInterface2 = "+counterInt)
+    console.log( "intSpd = " + intSpd)
   calculateUtilize(countInterface,intSpd,nodeName)
 }
 
@@ -393,9 +396,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumUtilizeIn  = 0
   let sumUtilizeOut = 0
   let sumInterface = 0
-    console.log("counterInterface2 = "+countInterface)
   for (let i = 0; i < countInterface; i++) {
-    console.log("InterfaceSpeed of " + i + interfaceSpeed[i].intSpd)
     sumInterface += interfaceSpeed[i].intSpd
   }
   sumInterface = sumInterface/countInterface
