@@ -311,7 +311,7 @@ function getMIB (nodeName, date, time) {
           countInterface++
         }
       })
-       console.log("countInterface = " + countInterface)  // out commend for checking data
+       //console.log("countInterface = " + countInterface)  // out commend for checking data
     }
 
     let suminpktU = 0
@@ -347,7 +347,7 @@ function getMIB (nodeName, date, time) {
         }
         intSpd.push(data)
       })
-      console.log("intspd = " +intSpd)  // out commend for checking data
+      //console.log("intspd = " +intSpd)  // out commend for checking data
     }
   })
 
@@ -374,8 +374,11 @@ function getMIB (nodeName, date, time) {
     })
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }console.log("counterInterface2 = "+counterInt)
-    
+  setTimeout(() => {
+    console.log("counterInterface = " + countInterface)
+    console.log("intSpd = " + JSON.stringify(intSpd))
   calculateUtilize(countInterface,intSpd,nodeName)
+  },2000)
 }
 
 
