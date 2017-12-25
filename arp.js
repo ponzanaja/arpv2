@@ -60,7 +60,6 @@ let sumInpkts = 0
 let packetloss = 0
 let temparature = 0
 let humanity = 0
-let counterInt = 0
 /// //////////////////// Network letiable End here ///////////////////////
 
 /* ---------------------------------------------------------------------- */
@@ -294,7 +293,6 @@ function getMIB (nodeName, date, time) {
 
   let intName = []
   let countInterface = 0
-  counterInt = 0
   deviceNetwork.getSubtree({
     oid: intNameOID
   }, function (err, letbinds) {
