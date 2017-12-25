@@ -391,6 +391,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumInterface = 0
   
   for (let i = 0; i < countInterface; i++) {
+    console.log("InterfaceSpeed of " + i + interfaceSpeed[i].intSpd)
     sumInterface += interfaceSpeed[i].intSpd
   }
   sumInterface = sumInterface/countInterface
@@ -428,12 +429,10 @@ function sendTemparature () {
 }
 /* // Define port number as 3000
 const port = 3000
-
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
 app.get('/', function (request, response) {
   response.send(ipNow + 'ออนไลน์ user' + online)
 })
-
 // Make the app listen on port 3000
 app.listen(port, function () {
   console.log('Server listening on http://localhost:' + port)
