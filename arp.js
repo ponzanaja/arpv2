@@ -376,7 +376,6 @@ function getMIB (nodeName, date, time) {
   }
   setTimeout(() => {
     console.log("counterInterface = " + countInterface)
-    console.log("intSpd = " + JSON.stringify(intSpd))
   calculateUtilize(countInterface,intSpd,nodeName)
   },4000)
 }
