@@ -294,6 +294,7 @@ function getMIB (nodeName, date, time) {
 
   let intName = []
   let countInterface = 0
+  intSpd = 0
   deviceNetwork.getSubtree({
     oid: intNameOID
   }, function (err, letbinds) {
