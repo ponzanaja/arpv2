@@ -400,10 +400,8 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumInterface = 0
   for (let i = 0; i < countInterface; i++) {
     sumInterface += interfaceSpeed[i].intSpd/1048576
-    console.log("sumInterface in loop " + i +" = " + sumInterface)
   }
   sumInterface = sumInterface/countInterface
-  console.log("suminterface = "+sumInterface)
   let data =  dbInfo.find(info => info.node === nodeName)
   let inbound1 = data.inbound[data.inbound.length-1].value
   let inbound2 = data.inbound[data.inbound.length-2].value
@@ -411,10 +409,10 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let outbound2 = data.outbound[data.outbound.length-2].value
   let sumIn = (inbound2 - inbound1)*100
   let sumOut = (outbound2 - outbound1)*100
-  
+  console.log("Sum In before =" + sumIn + "Sum Out before = " + sumOut)
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
-  console.log("Sum In =" + sumIn + "Sum Out = " + sumOut)
+  console.log("Sum In after =" + sumIn + "Sum Out after = " + sumOut)
   if(isNaN(sumIn)) sumIn = 0
   if(isNaN(sumOut)) sumOut = 0
   firebase.database().ref('db/' + data.id).update({
