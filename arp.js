@@ -393,7 +393,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumUtilizeIn  = 0
   let sumUtilizeOut = 0
   let sumInterface = 0
-  
+    console.log("counterInterface = "+countInterface)
   for (let i = 0; i < countInterface; i++) {
     console.log("InterfaceSpeed of " + i + interfaceSpeed[i].intSpd)
     sumInterface += interfaceSpeed[i].intSpd
