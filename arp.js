@@ -373,7 +373,6 @@ function getMIB (nodeName, date, time) {
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
   setTimeout(() => {
-    console.log("counterInterface = " + countInterface)
   calculateUtilize(countInterface,intSpd,nodeName)
   },4000)
 }
@@ -411,11 +410,8 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
    outbound2 = data.outbound[data.outbound.length-2].value
   let sumIn = (inbound2 - inbound1)*100
   let sumOut = (outbound2 - outbound1)*100
-    console.log("inbound 2 = " + inbound2 + " inbound1 = " + inbound1)
-
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
-  console.log("Sum In after =" + sumIn + "Sum Out after = " + sumOut)
   if(isNaN(sumIn)) sumIn = 0
   if(isNaN(sumOut)) sumOut = 0
   firebase.database().ref('db/' + data.id).update({
