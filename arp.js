@@ -412,6 +412,8 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let sumOut = (outbound2 - outbound1)*100
   sumIn = sumIn/(60*sumInterface)
   sumOut = sumOut/(60*sumInterface)
+  sumIn = Math.abs(sumIn) 
+  sumOut = Math.abs(sumOut)
   if(isNaN(sumIn)) sumIn = 0
   if(isNaN(sumOut)) sumOut = 0
   firebase.database().ref('db/' + data.id).update({
