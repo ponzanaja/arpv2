@@ -13,7 +13,6 @@ const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
 const freeMemoryOID = [1, 3, 6, 1, 4, 1, 9, 2, 1, 8, 0] // max 128MB
 const temparatureOID = [1, 3, 6, 1, 4, 1, 9, 9, 13, 1, 3, 1, 3, 1005]
 const cpuUsageOID = [1,3,6,1,4,1,9,2,1,57,0]
-
 const nodeNIP = '10.4.15.1'
 /* root / root1234 10.4.15.1  192.168.1.254*/ 
 const {exec} = require('child_process')
@@ -38,19 +37,12 @@ db.on('child_added', function (snapshot) {
   dbInfo.push(item)
 })
 // checking for update from firebase
-db.on('child_changed', function (snapshot) {
-  let id = snapshot.key
-  let sNode = dbInfo.find(info => info.id === id)
-  /* sNode.node = snapshot.val().node
-  sNode.ip = snapshot.val().ip
-  sNode.onlinenow = snapshot.val().onlinenow
-  sNode.inbound = snapshot.val().inbound
-  sNode.outbound = snapshot.val().outbound
-  sNode.speedtestUp = snapshot.val().speedtestUp
-  sNode.speedtestDown = snapshot.val().speedtestDown
-  sNode.utilize = snapshot.val().utilize
-  sNode.packetloss = snapshot.val().packetloss
-  console.log( ' CHANGE dbInfo \n ' + dbInfo) */
+db.on('child_changed', function (snapshot) { 
+  let data = snapshot.val()
+  data.id = snapshot.key
+  let arrTemp = []
+  arrTemp.push(data)
+  showdata = arrTemp
 })
 /// //////////////////// Network letiable Start here ///////////////////////
 let dataGet = ''
@@ -64,6 +56,10 @@ let sumInpkts = 0
 let packetloss = 0
 let temparature = 0
 let humanity = 0
+let temparatureSw = 0
+let cpu = 0
+let memory = 0
+
 /// //////////////////// Network letiable End here ///////////////////////
 
 /* ---------------------------------------------------------------------- */
@@ -95,7 +91,7 @@ setInterval(() => {
     humanity = humanity.trim()
     temparature = temparature.trim()
   })
-}, 60000)
+}, 300000)
 
 function showResult () {
   getIP().then(getOnline).then((data) => {
@@ -134,8 +130,7 @@ function sendtoFirebase (nodeName, date, time) {
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
-    date: date,
-    time: time 
+    valueswtemp: temparatureSw
   }
   let spdtestData = {
     valuedown: download,
@@ -145,14 +140,13 @@ function sendtoFirebase (nodeName, date, time) {
   }
   if (check) {
     let spdcheck = check.speedtest
-    let temparacheck = check.temparature
     spdcheck.push(spdtestData)
-    temparacheck.push(temparatureData)
     firebase.database().ref('db/' + check.id).update({
       ip: ipNow,
       onlinenow: online,
       speedtest: spdcheck,
-      temparature: temparacheck,
+      temparature: temparatureData,
+      
       alive:true,
       alive2:true
     })
@@ -177,12 +171,17 @@ function sendtoFirebase (nodeName, date, time) {
         date: date,
         time: time
       }],
-      temparature: [{
-        valueh: 0,
-        valuet: 0,
-        date: date,
-        time: time
-      }],
+      temparature: {
+        valueh:0,
+        valuet:0,
+        valueswtemp:0
+      },
+      mainlink: {
+        in:0,
+        out:0
+      },
+      cpu: 0,
+      memory:0,
       utilizein: 0,
       utilizeout:0,
       packetloss: 0,
@@ -210,15 +209,18 @@ function getMIB (nodeName, date, time) {
       console.log(err)
     } else {
       letbinds.forEach((letbind) => {
+        //console.log(letbind.oid)
         let data = {
           indexOID: letbind.oid[10],
           inbound: parseInt(letbind.value / 1048576)
         }
+        //console.log(data)
         inbound.push(data)
       })
       // console.log(inbound) out commend for checking data
     }
   })
+  
   // getOutbound
   let outbound = []
   deviceNetwork.getSubtree({
@@ -237,7 +239,43 @@ function getMIB (nodeName, date, time) {
       //  console.log(outbound) out commend for checking data
     }
   })
+//////////////////////////////////  NEW SECTION ///////////////////////////////
+  //getCPUusage
+  deviceNetwork.get({
+    oid: cpuUsageOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        cpu = letbinds[0].value
+      // console.log(cpu) //out commend for checking data
+    }
+  })
 
+   //getMemory
+   deviceNetwork.get({
+    oid: freeMemoryOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        memory = letbinds[0].value / 1048576
+       // console.log(memory) // out commend for checking data
+    }
+  })
+
+   //getTempratureIn
+   deviceNetwork.get({
+    oid: temparatureOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        temparatureSw =  letbinds[0].value
+       // console.log(temparatureSw) // out commend for checking data
+    }
+  })
+//////////////////////////////////  NEW SECTION ///////////////////////////////
   // getPacketU
   let packetinU = []
   deviceNetwork.getSubtree({
@@ -318,7 +356,7 @@ function getMIB (nodeName, date, time) {
 
     let suminpktU = 0
     let suminpktsErr = 0
-    for (let i = 0; i < countInterface; i++) {
+    for (let i = 63; i < 67; i++) {
       sumInbound += inbound[i].inbound
       sumOutbound += outbound[i].outbound
       suminpktU += packetinU[i].pktsinu
@@ -330,9 +368,9 @@ function getMIB (nodeName, date, time) {
     } else {
       packetloss = 0
     }
-    //console.log('Sum inbound : ' + sumInbound)
-    //console.log('Sum PacketIn :' + sumInpkts)
-    //console.log('Packetloss : ' + packetloss)
+   // console.log('Sum inbound : ' + sumInbound)
+    // console.log('Sum PacketIn :' + sumInpkts)
+    // console.log('Packetloss : ' + packetloss)
   })
 
   let intSpd =  []
@@ -349,7 +387,7 @@ function getMIB (nodeName, date, time) {
         }
         intSpd.push(data)
       })
-      //console.log("intspd = " +intSpd)  // out commend for checking data
+      //console.log("intspd = " +JSON.stringify(intSpd))  // out commend for checking data
     }
   })
 
@@ -357,6 +395,8 @@ function getMIB (nodeName, date, time) {
   if (check) {
     let checkInbound = check.inbound
     let checkOutbound = check.outbound
+    let memoryFree = (memory*100)/128
+    let data = {}
     let insertIn = {
       value: sumInbound,
       date: date,
@@ -367,18 +407,37 @@ function getMIB (nodeName, date, time) {
       date: date,
       time: time
     }
+    setTimeout(() => {
+      let inb =  inbound[63].inbound
+      let outb = outbound[63].outbound
+      let mainlinkData = {
+        in: inb,
+        out: outb
+      }
+      data = mainlinkData
+    }, 3000)
+    
     checkInbound.push(insertIn)
     checkOutbound.push(insertOut)
-    firebase.database().ref('db/' + check.id).update({
-      inbound: checkInbound,
-      outbound: checkOutbound,
-      packetloss: packetloss
-    })
+    setTimeout(() => {
+      firebase.database().ref('db/' + check.id).update({
+        inbound: checkInbound,
+        outbound: checkOutbound,
+        packetloss: packetloss,
+        mainlink: data,
+        cpu: cpu,
+        memory:memoryFree
+
+      })
+    }, 9000)
+      
+   
+   
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
   setTimeout(() => {
   calculateUtilize(countInterface,intSpd,nodeName)
-  },4000)
+  },7000)
 }
 
 
@@ -403,10 +462,10 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let inbound2 = 0
   let outbound1 = 0
   let outbound2 = 0
-  for (let i = 0; i < countInterface; i++) {
+  for (let i = 63; i < 67; i++) {
     sumInterface += interfaceSpeed[i].intSpd/1048576
   }
-  sumInterface = sumInterface/countInterface
+
   let data =  dbInfo.find(info => info.node === nodeName)
    inbound1 = data.inbound[data.inbound.length-1].value
    inbound2 = data.inbound[data.inbound.length-2].value
@@ -414,8 +473,8 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
    outbound2 = data.outbound[data.outbound.length-2].value
   let sumIn = (inbound2 - inbound1)*100
   let sumOut = (outbound2 - outbound1)*100
-  sumIn = sumIn/(60*sumInterface)
-  sumOut = sumOut/(60*sumInterface)
+  sumIn = sumIn/(300*sumInterface)
+  sumOut = sumOut/(300*sumInterface)
   sumIn = Math.abs(sumIn) 
   sumOut = Math.abs(sumOut)
   if(isNaN(sumIn)) sumIn = 0
