@@ -44,6 +44,12 @@ db.on('child_changed', function (snapshot) {
   arrTemp.push(data)
   dbInfo = arrTemp
 })
+
+db.on('child_removed', function (snapshot) {
+    var id = snapshot.key
+    var index = dbInfo.findIndex(user => user.id === id)
+     userInfo.splice(index,1)
+})
 /// //////////////////// Network letiable Start here ///////////////////////
 let dataGet = ''
 let online = ''
