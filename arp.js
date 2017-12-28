@@ -42,7 +42,7 @@ db.on('child_changed', function (snapshot) {
   data.id = snapshot.key
   let arrTemp = []
   arrTemp.push(data)
-  showdata = arrTemp
+  dbInfo = arrTemp
 })
 /// //////////////////// Network letiable Start here ///////////////////////
 let dataGet = ''
