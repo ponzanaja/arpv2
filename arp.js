@@ -416,6 +416,8 @@ function getMIB (nodeName, date, time) {
     setTimeout(() => {
       let inb =  inbound[63].inbound
       let outb = outbound[63].outbound
+      console.log("Inbound " + inb + "Outbound " + outb)
+      
       let mainlinkData = {
         in: inb,
         out: outb
