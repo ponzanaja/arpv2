@@ -414,7 +414,7 @@ function getMIB (nodeName, date, time) {
       time: time
     }
     setTimeout(() => {
-      //console.log(inbound)
+      console.log(inbound)
       let inb =  inbound[64].inbound
       let outb = outbound[64].outbound
       console.log("Inbound " + inb + "Outbound " + outb)
