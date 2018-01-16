@@ -413,12 +413,9 @@ function getMIB (nodeName, date, time) {
       date: date,
       time: time
     }
-    setTimeout(() => {
-      console.log(inbound)
+    setTimeout(() => {   
       let inb =  inbound[64].inbound
-      let outb = outbound[64].outbound
-      console.log("Inbound " + inb + "Outbound " + outb)
-      
+      let outb = outbound[64].outbound 
       let mainlinkData = {
         in: inb,
         out: outb
@@ -471,7 +468,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let inbound2 = 0
   let outbound1 = 0
   let outbound2 = 0
-  for (let i = 63; i < 67; i++) {
+  for (let i = 64; i <= 67; i++) {
     sumInterface += interfaceSpeed[i].intSpd/1048576
   }
 
