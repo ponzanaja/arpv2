@@ -97,7 +97,7 @@ setInterval(() => {
     humanity = humanity.trim()
     temparature = temparature.trim()
   })
-}, 300000)
+}, 60000)
 
 function showResult () {
   getIP().then(getOnline).then((data) => {
@@ -414,6 +414,7 @@ function getMIB (nodeName, date, time) {
       time: time
     }
     setTimeout(() => {
+      console.log(inbound)
       let inb =  inbound[63].inbound
       let outb = outbound[63].outbound
       console.log("Inbound " + inb + "Outbound " + outb)
