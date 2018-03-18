@@ -31,7 +31,7 @@ let db = firebase.database().ref('db')
 
 let dbInfo = []
 // when you have some data update
-db.on('child_added', function (snapshot) {
+/*db.on('child_added', function (snapshot) {
   let item = snapshot.val()
   item.id = snapshot.key
   dbInfo.push(item)
@@ -49,7 +49,7 @@ db.on('child_removed', function (snapshot) {
     var id = snapshot.key
     var index = dbInfo.findIndex(user => user.id === id)
      userInfo.splice(index,1)
-})
+})*/
 /// //////////////////// Network letiable Start here ///////////////////////
 let dataGet = ''
 let online = ''
@@ -397,10 +397,8 @@ function getMIB (nodeName, date, time) {
     }
   })
 
-  let check = dbInfo.find(info => info.node === nodeName)
+  let check = db.child('-L46xegEleuKcTnJXDjg')
   if (check) {
-    let checkInbound = check.inbound
-    let checkOutbound = check.outbound
     let memoryFree = (memory*100)/128
     let data = {}
     let insertIn = {
@@ -422,28 +420,23 @@ function getMIB (nodeName, date, time) {
       }
       data = mainlinkData
     }, 3000)
-    
-    checkInbound.push(insertIn)
-    checkOutbound.push(insertOut)
-    setTimeout(() => {
-      firebase.database().ref('db/' + check.id).update({
-        inbound: checkInbound,
-        outbound: checkOutbound,
-        packetloss: packetloss,
-        mainlink: data,
-        cpu: cpu,
-        memory:memoryFree
 
-      })
+    setTimeout(() => {
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/packetloss').push(packetloss)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/mainlink').push(data)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/cpu').push(cpu)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/memory').push(memoryFree)
     }, 9000)
       
    
    
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
-  setTimeout(() => {
+  /*setTimeout(() => {
   calculateUtilize(countInterface,intSpd,nodeName)
-  },7000)
+  },7000)*/
 }
 
 
