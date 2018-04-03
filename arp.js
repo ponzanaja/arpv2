@@ -44,7 +44,6 @@ db.on('child_changed', function (snapshot) {
   arrTemp.push(data)
   dbInfo = arrTemp
 })
-
 db.on('child_removed', function (snapshot) {
     var id = snapshot.key
     var index = dbInfo.findIndex(user => user.id === id)
@@ -424,8 +423,8 @@ function getMIB (nodeName, date, time) {
     setTimeout(() => {
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/packetloss').push(packetloss)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/mainlink').push(data)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/cpu').push(cpu)
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/memory').push(memoryFree)
     }, 9000)
