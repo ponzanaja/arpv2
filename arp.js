@@ -131,7 +131,7 @@ function getOnline (ip) {
 }
 
 function sendtoFirebase (nodeName, date, time) {
-  let check = dbInfo.find(info => info.node === nodeName)
+  let check = db.child('-L46xegEleuKcTnJXDjg')
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
@@ -146,7 +146,7 @@ function sendtoFirebase (nodeName, date, time) {
   if (check) {
     let spdcheck = check.speedtest
     spdcheck.push(spdtestData)
-    firebase.database().ref('db/' + check.id).update({
+    firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
       ip: ipNow,
       onlinenow: online,
       speedtest: spdcheck,
@@ -425,8 +425,8 @@ function getMIB (nodeName, date, time) {
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
       firebase.database().ref('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/cpu').push(cpu)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/memory').push(memoryFree)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
     }, 9000)
       
    
