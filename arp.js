@@ -421,12 +421,12 @@ function getMIB (nodeName, date, time) {
     }, 3000)
 
     setTimeout(() => {
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
     }, 9000)
       
    
