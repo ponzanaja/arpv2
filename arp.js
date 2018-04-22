@@ -49,7 +49,7 @@ db.on('child_removed', function (snapshot) {
     var index = dbInfo.findIndex(user => user.id === id)
      userInfo.splice(index,1)
 })*/
-/// //////////////////// Network letiable Start here ///////////////////////
+/// //////////////////// Network variable Start here ///////////////////////
 let dataGet = ''
 let online = ''
 let ipNow = ''
@@ -65,16 +65,16 @@ let temparatureSw = 0
 let cpu = 0
 let memory = 0
 
-/// //////////////////// Network letiable End here ///////////////////////
+/// //////////////////// Network variable End here ///////////////////////
 
 /* ---------------------------------------------------------------------- */
 
 setInterval(() => {
-  /// //////////////////// Date letiable Start here ///////////////////////
+  /// //////////////////// Date variable Start here ///////////////////////
   let now = new Date()
   let date = dateFormat(now, 'd/m/yyyy')
   let time = dateFormat(now, 'HH:MM:ss')
-  /// //////////////////// Date letiable End here ////////////////////////
+  /// //////////////////// Date variable End here ////////////////////////
   showResult()
   sendtoFirebase('Node1', date, time)
   speedTest().then((result) => {
