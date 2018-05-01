@@ -144,10 +144,14 @@ function sendtoFirebase (nodeName, date, time) {
     time: time
   }
   if (check) {
+    if(humanity !== "ron" && temparature !== "Wrong"){
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
+        temparature: temparatureData,
+      })
+    }
     firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
       ip: ipNow,
       onlinenow: online,
-      temparature: temparatureData,
       alive:true,
       alive2:true
     })
