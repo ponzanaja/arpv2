@@ -101,9 +101,11 @@ setInterval(() => {
 function showResult () {
   getIP().then(getOnline).then((data) => {
     dataGet = data
+    console.log("data get" + dataGet)
     let indexOfuser = dataGet.lastIndexOf('(')
     let onlineUser = dataGet.slice(indexOfuser + 1, indexOfuser + 2)
     online = onlineUser
+    console.log(online)
   }).catch((error) => {
     console.error(error.message)
   })
