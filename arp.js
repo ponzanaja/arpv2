@@ -101,8 +101,9 @@ setInterval(() => {
 function showResult () {
   getIP().then(getOnline).then((data) => {
     dataGet = data
-    console.log("data get" + dataGet)
     let indexOfuser = dataGet.lastIndexOf('(')
+    let lastOfIndex = dataGet.lastIndexOf('host')
+    console.log("IOU :"+indexOfuser +" LOI : "+lastOfIndex)
     let onlineUser = dataGet.slice(indexOfuser + 1, indexOfuser + 2)
     online = onlineUser
     console.log(online)
