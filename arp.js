@@ -96,7 +96,7 @@ setInterval(() => {
     humanity = humanity.trim()
     temparature = temparature.trim()
   })
-}, 300000)
+}, 15000)
 
 function showResult () {
   getIP().then(getOnline).then((data) => {
@@ -122,6 +122,7 @@ function getIP () {
 function getOnline (ip) {
   //console.log('This Is IP Parameter ' + ip)
   let newIP = ip.replace(/(\r\n|\n|\r)/gm, '').concat('/24')
+  console.log("This is new IP :"+newIP)
   return new Promise((resolve, reject) => {
     exec('nmap -sP ' + newIP, (err, stdout, stderr) => {
       if (err) return reject("get Online Error : "+err)
