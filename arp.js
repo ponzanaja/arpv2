@@ -145,9 +145,9 @@ function sendtoFirebase (nodeName, date, time) {
     time: time
   }
   if (check) {
-    let spdcheck = check.speedtest
-    spdcheck.push(spdtestData)
-    firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
+    //let spdcheck = check.speedtest
+    //spdcheck.push(spdtestData)
+    firebase.database().ref('db/-L46xegEleuKcTnJXDjg/speedtest').push({
       ip: ipNow,
       onlinenow: online,
       speedtest: spdcheck,
