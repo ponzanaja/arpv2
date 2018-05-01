@@ -132,6 +132,7 @@ function getOnline (ip) {
 
 function sendtoFirebase (nodeName, date, time) {
   let check = db.child('-L46xegEleuKcTnJXDjg')
+  console.log(check)
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
