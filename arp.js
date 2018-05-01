@@ -132,7 +132,6 @@ function getOnline (ip) {
 
 function sendtoFirebase (nodeName, date, time) {
   let check = db.child('-L46xegEleuKcTnJXDjg')
-  console.log(check)
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
@@ -145,16 +144,15 @@ function sendtoFirebase (nodeName, date, time) {
     time: time
   }
   if (check) {
-    //let spdcheck = check.speedtest
-    //spdcheck.push(spdtestData)
-    firebase.database().ref('db/-L46xegEleuKcTnJXDjg/speedtest').push({
+    firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
       ip: ipNow,
       onlinenow: online,
-      speedtest: spdcheck,
       temparature: temparatureData,
-      
       alive:true,
       alive2:true
+    })
+    firebase.database().ref('db/-L46xegEleuKcTnJXDjg/speedtest').push({
+      speedtest: spdcheck,
     })
   } else {
     let sendData = {
