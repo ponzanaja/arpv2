@@ -96,7 +96,7 @@ setInterval(() => {
     humanity = humanity.trim()
     temparature = temparature.trim()
   })
-}, 15000)
+}, 300000)
 
 function showResult () {
   getIP().then(getOnline).then((data) => {
