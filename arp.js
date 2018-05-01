@@ -152,7 +152,7 @@ function sendtoFirebase (nodeName, date, time) {
       alive2:true
     })
     firebase.database().ref('db/-L46xegEleuKcTnJXDjg/speedtest').push({
-      speedtest: spdcheck,
+      speedtest: spdtestData,
     })
   } else {
     let sendData = {
