@@ -103,8 +103,7 @@ function showResult () {
     dataGet = data
     let indexOfuser = dataGet.lastIndexOf('(')
     let lastOfIndex = dataGet.lastIndexOf('host')
-    console.log("IOU :"+indexOfuser +" LOI : "+lastOfIndex)
-    let onlineUser = dataGet.slice(indexOfuser + 1, indexOfuser + 2)
+    let onlineUser = dataGet.slice(indexOfuser + 1, lastOfIndex-1)
     online = onlineUser
     console.log(online)
   }).catch((error) => {
