@@ -156,6 +156,7 @@ function sendtoFirebase (nodeName, date, time) {
       onlinenow: online
     })
     firebase.database().ref('alive/-L46xegEleuKcTnJXDjg').update({
+      nodeName:nodeName,
       alive:true,
       alive2:true
     })
