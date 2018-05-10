@@ -77,7 +77,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date variable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node1', date, time)
+  sendtoFirebase('Node415', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -88,7 +88,7 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node1', date, time)
+  getMIB('Node415', date, time)
   sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('T')
