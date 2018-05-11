@@ -427,7 +427,7 @@ function getMIB (nodeName, date, time) {
     }, 3000)
 
     setTimeout(() => {
-      let sumInterface
+      let sumInterface = 0
       for (let i = 64; i <= 67; i++) {
         sumInterface += intSpd[i].intSpd/1048576
       }
