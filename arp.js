@@ -11,9 +11,10 @@ const pktsInErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const pktsOutErrOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 14]
 const intNameOID = [1, 3, 6, 1, 2, 1, 2, 2, 1, 2]
 const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
-
-
-const nodeNIP = '192.168.1.252'
+const freeMemoryOID = [1, 3, 6, 1, 4, 1, 9, 2, 1, 8, 0] // max 128MB
+const temparatureOID = [1, 3, 6, 1, 4, 1, 9, 9, 13, 1, 3, 1, 3, 1005]
+const cpuUsageOID = [1,3,6,1,4,1,9,2,1,57,0]
+const nodeNIP = '10.4.15.1'
 /* root / root1234 10.4.15.1  192.168.1.254*/ 
 const {exec} = require('child_process')
 
@@ -62,6 +63,8 @@ let packetloss = 0
 let temparature = 0
 let humanity = 0
 let temparatureSw = 0
+let cpu = 0
+let memory = 0
 
 /// //////////////////// Network variable End here ///////////////////////
 
@@ -74,7 +77,7 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date variable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node3', date, time)
+  sendtoFirebase('Node415', date, time)
   speedTest().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfdownload = newResult.indexOf('M')
@@ -85,7 +88,7 @@ setInterval(() => {
     download = download.trim()
     upload = upload.trim()
   })
-  getMIB('Node3', date, time)
+  getMIB('Node415', date, time)
   sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('T')
@@ -94,12 +97,6 @@ setInterval(() => {
     humanity = humanity.trim()
     temparature = temparature.trim()
   })
-  packetTest().then((result) => {
-    let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
-    let indexOfPacket = newResult.lastIndexOf("packet")
-
-  })
-
 }, 300000)
 
 function showResult () {
@@ -136,7 +133,7 @@ function getOnline (ip) {
 }
 
 function sendtoFirebase (nodeName, date, time) {
-  let check = db.child('-L46xegEleuKcTnJXDjB')
+  let check = db.child('-L46xegEleuKcTnJXDjg')
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
@@ -150,20 +147,20 @@ function sendtoFirebase (nodeName, date, time) {
   }
   if (check) {
     if(humanity !== "ron" && temparature !== "Wrong"){
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjB').update({
+      firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
         temparature: temparatureData,
       })
     }
-    firebase.database().ref('db/-L46xegEleuKcTnJXDjB').update({
+    firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
       ip: ipNow,
       onlinenow: online
     })
-    firebase.database().ref('alive/-L46xegEleuKcTnJXDjB').update({
+    firebase.database().ref('alive/-L46xegEleuKcTnJXDjg').update({
       nodeName:nodeName,
       alive:true,
       alive2:true
     })
-    firebase.database().ref().child('db/-L46xegEleuKcTnJXDjB/speedtest').push(spdtestData)
+    firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/speedtest').push(spdtestData)
   } else {
     let sendData = {
       node: nodeName,
@@ -254,7 +251,99 @@ function getMIB (nodeName, date, time) {
     }
   })
 //////////////////////////////////  NEW SECTION ///////////////////////////////
-  
+  //getCPUusage
+  deviceNetwork.get({
+    oid: cpuUsageOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        cpu = letbinds[0].value
+      // console.log(cpu) //out commend for checking data
+    }
+  })
+
+   //getMemory
+   deviceNetwork.get({
+    oid: freeMemoryOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        memory = letbinds[0].value / 1048576
+       // console.log(memory) // out commend for checking data
+    }
+  })
+
+   //getTempratureIn
+   deviceNetwork.get({
+    oid: temparatureOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+        temparatureSw =  letbinds[0].value
+       // console.log(temparatureSw) // out commend for checking data
+    }
+  })
+//////////////////////////////////  NEW SECTION ///////////////////////////////
+  // getPacketU
+  let packetinU = []
+  deviceNetwork.getSubtree({
+    oid: packetinUOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+      letbinds.forEach((letbind) => {
+        let data = {
+          indexOID: letbind.oid[10],
+          pktsinu: letbind.value
+        }
+        packetinU.push(data)
+      })
+      //  console.log(packetinU) out commend for checking data
+    }
+  })
+
+  // getPktsInErr
+  let pktsInErr = []
+  deviceNetwork.getSubtree({
+    oid: pktsInErrOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+      letbinds.forEach((letbind) => {
+        let data = {
+          indexOID: letbind.oid[10],
+          pktsinerr: letbind.value
+        }
+        pktsInErr.push(data)
+      })
+      //  console.log(pktsInErr) out commend for checking data
+    }
+  })
+
+  // getPktsOutErr
+  let pktsOutErr = []
+  deviceNetwork.getSubtree({
+    oid: pktsOutErrOID
+  }, function (err, letbinds) {
+    if (err) {
+      console.log(err)
+    } else {
+      letbinds.forEach((letbind) => {
+        let data = {
+          indexOID: letbind.oid[10],
+          pktsouterr: letbind.value
+        }
+        pktsOutErr.push(data)
+      })
+      //  console.log(packetinU) out commend for checking data
+    }
+  })
+
   let intName = []
   let countInterface = 0
   deviceNetwork.getSubtree({
@@ -275,8 +364,21 @@ function getMIB (nodeName, date, time) {
       })
        //console.log("countInterface = " + countInterface)  // out commend for checking data
     }
-      sumInbound += inbound[0].inbound
-      sumOutbound += outbound[0].outbound
+
+    let suminpktU = 0
+    let suminpktsErr = 0
+    for (let i = 63; i < 67; i++) {
+      sumInbound += inbound[i].inbound
+      sumOutbound += outbound[i].outbound
+      suminpktU += packetinU[i].pktsinu
+      suminpktsErr += pktsInErr[i].pktsinerr
+    }
+    sumInpkts = suminpktU
+    if (sumInpkts !== 0) {
+      packetloss = (suminpktsErr / sumInpkts) * 100
+    } else {
+      packetloss = 0
+    }
    // console.log('Sum inbound : ' + sumInbound)
     // console.log('Sum PacketIn :' + sumInpkts)
     // console.log('Packetloss : ' + packetloss)
@@ -300,10 +402,9 @@ function getMIB (nodeName, date, time) {
     }
   })
 
-  
-  
-  let check = db.child('-L46xegEleuKcTnJXDjB')
+  let check = db.child('-L46xegEleuKcTnJXDjg')
   if (check) {
+    let memoryFree = (memory*100)/128
     let data = {}
     let insertIn = {
       value: sumInbound,
@@ -316,8 +417,8 @@ function getMIB (nodeName, date, time) {
       time: time
     }
     setTimeout(() => {   
-      let inb =  inbound[0].inbound
-      let outb = outbound[0].outbound 
+      let inb =  inbound[64].inbound
+      let outb = outbound[64].outbound 
       let mainlinkData = {
         in: inb,
         out: outb
@@ -325,22 +426,29 @@ function getMIB (nodeName, date, time) {
       data = mainlinkData
     }, 3000)
 
-    setTimeout(() => {  
-    let sumInterface = intSpd[0].intSpd/1048576
-    console.log(sumInterface)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjB/inbound').push(insertIn)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjB/outbound').push(insertOut)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjB/packetloss').set(packetloss)
-      //firebase.database().ref().child('db/-L46xegEleuKcTnJXDjB/sumInterface').set(sumInterface)
+    setTimeout(() => {
+      let sumInterface
+      for (let i = 64; i <= 67; i++) {
+        sumInterface += intSpd[i].intSpd/1048576
+      }
+      console.log(sumInterface)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/sumInterface').set(sumInterface)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
     }, 9000)
       
    
    
-    sumInbound = sumOutbound = 0
+    sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
-  /*setTimeout(() => {
-  calculateUtilize(countInterface,intSpd,nodeName)
-  },7000)*/
+  setTimeout(() => {
+  //calculateUtilize(countInterface,intSpd,nodeName)
+  
+  },7000)
 }
 
 
@@ -365,9 +473,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let inbound2 = 0
   let outbound1 = 0
   let outbound2 = 0
-
-   
-
+  
 
   let data =  dbInfo.find(info => info.node === nodeName)
    inbound1 = data.inbound[data.inbound.length-1].value
@@ -400,20 +506,6 @@ function sendTemparature () {
     })
   })
 }
-
-function packetTest () {
-  return new Promise((resolve, reject) => {
-    exec('tcpdump -i eth0 -c 100 -B 4096', {
-      cwd: '/project1'
-    }, (err, stdout, stderr) => {
-      setTimeout(() => {
-        if (err) return reject("PacketTest Error : " + err)
-        else resolve(`${stdout}`)
-      })
-    })
-  })
-}
-
 /* // Define port number as 3000
 const port = 3000
 // Routes HTTP GET requests to the specified path "/" with the specified callback function
