@@ -443,7 +443,7 @@ function getMIB (nodeName, date, time) {
   //calculateUtilize(countInterface,intSpd,nodeName)
   let sumInterface
   for (let i = 64; i <= 67; i++) {
-    sumInterface += interfaceSpeed[i].intSpd/1048576
+    sumInterface += intSpd[i].intSpd/1048576
   }
   firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/sumInterface').set(sumInterface)
   },7000)
