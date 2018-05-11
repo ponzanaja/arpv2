@@ -439,9 +439,14 @@ function getMIB (nodeName, date, time) {
    
     sumInbound = sumOutbound = sumInpkts = suminpktU = suminpktsErr = 0
   }
-  /*setTimeout(() => {
-  calculateUtilize(countInterface,intSpd,nodeName)
-  },7000)*/
+  setTimeout(() => {
+  //calculateUtilize(countInterface,intSpd,nodeName)
+  let sumInterface
+  for (let i = 64; i <= 67; i++) {
+    sumInterface += interfaceSpeed[i].intSpd/1048576
+  }
+  firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/sumInterface').set(sumInterface)
+  },7000)
 }
 
 
@@ -466,9 +471,7 @@ function calculateUtilize (countInterface,interfaceSpeed,nodeName) {
   let inbound2 = 0
   let outbound1 = 0
   let outbound2 = 0
-  for (let i = 64; i <= 67; i++) {
-    sumInterface += interfaceSpeed[i].intSpd/1048576
-  }
+  
 
   let data =  dbInfo.find(info => info.node === nodeName)
    inbound1 = data.inbound[data.inbound.length-1].value
