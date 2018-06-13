@@ -65,6 +65,7 @@ let humanity = 0
 let temparatureSw = 0
 let cpu = 0
 let memory = 0
+let iplist = []
 
 /// //////////////////// Network variable End here ///////////////////////
 
@@ -106,6 +107,9 @@ function showResult () {
     let lastOfIndex = dataGet.lastIndexOf('host')
     let onlineUser = dataGet.slice(indexOfuser + 1, lastOfIndex-1)
     online = onlineUser
+    let re = /(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})\n/g
+    let found = data.match(re)
+    iplist = found.map(found => found.trim())
   }).catch((error) => {
     console.error(error.message)
   })
@@ -438,6 +442,7 @@ function getMIB (nodeName, date, time) {
       firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
       firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
       firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
+      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/iplist').set(iplist)
     }, 9000)
       
    
