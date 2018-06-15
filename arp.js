@@ -389,7 +389,7 @@ function getMIB (nodeName, date, time) {
 
     let suminpktU = 0
     let suminpktsErr = 0
-    for (let i = 63; i < 67; i++) {
+    for (let i = 63; i <= 67; i++) {
       sumInbound += inbound[i].inbound
       sumOutbound += outbound[i].outbound
       suminpktU += packetinU[i].pktsinu
