@@ -74,6 +74,8 @@ let flagSend = false
 
 setInterval(() => { 
     let now = new Date()
+    let date = dateFormat(now, 'd/m/yyyy')
+    let time = dateFormat(now, 'HH:MM:ss')
     let minutes = now.getminutes()
     if(minutes === fixTime && !(flagSend)){
         speedTest().then((result) => {
@@ -85,7 +87,12 @@ setInterval(() => {
             upload = newResult.slice(indexOfupload + 1, indexOfupload2)
             download = download.trim()
             upload = upload.trim()
-            firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/speedtest').push(spdtestData)
+            firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/speedtest').push({
+                    valuedown: download,
+                    valueup: upload,
+                    date: date,
+                    time: time  
+            })
             flagSend = true
           })
     }else if(minutes !== fixTime && flagSend){
@@ -155,12 +162,6 @@ function sendtoFirebase (nodeName, date, time) {
     valueh: humanity,
     valuet: temparature,
     valueswtemp: temparatureSw
-  }
-  let spdtestData = {
-    valuedown: download,
-    valueup: upload,
-    date: date,
-    time: time
   }
   if (check) {
     if(humanity !== "ron" && temparature !== "Wrong"){
