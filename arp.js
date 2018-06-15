@@ -14,8 +14,12 @@ const intSpeed = [1, 3, 6, 1, 2, 1, 2, 2, 1, 5]
 const freeMemoryOID = [1, 3, 6, 1, 4, 1, 9, 2, 1, 8, 0] // max 128MB
 const temparatureOID = [1, 3, 6, 1, 4, 1, 9, 9, 13, 1, 3, 1, 3, 1005]
 const cpuUsageOID = [1,3,6,1,4,1,9,2,1,57,0]
+
+
 const nodeNIP = '10.4.15.1'
 const fixTime = 5
+const nName = 'Node415'
+const firebaseKey = '-L46xegEleuKcTnJXDjg'
 /* root / root1234 10.4.15.1  192.168.1.254*/ 
 const {exec} = require('child_process')
 
@@ -87,7 +91,7 @@ setInterval(() => {
             upload = newResult.slice(indexOfupload + 1, indexOfupload2)
             download = download.trim()
             upload = upload.trim()
-            firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/speedtest').push({
+            firebase.database().ref().child('db/'+firebaseKey+'/speedtest').push({
                     valuedown: download,
                     valueup: upload,
                     date: date,
@@ -107,9 +111,9 @@ setInterval(() => {
   let time = dateFormat(now, 'HH:MM:ss')
   /// //////////////////// Date variable End here ////////////////////////
   showResult()
-  sendtoFirebase('Node415', date, time)
+  sendtoFirebase(nName, date, time)
   
-  getMIB('Node415', date, time)
+  getMIB(nName, date, time)
   sendTemparature().then((result) => {
     let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
     let indexOfTemparature = newResult.indexOf('T')
@@ -157,7 +161,7 @@ function getOnline (ip) {
 }
 
 function sendtoFirebase (nodeName, date, time) {
-  let check = db.child('-L46xegEleuKcTnJXDjg')
+  let check = db.child(firebaseKey)
   let temparatureData = {
     valueh: humanity,
     valuet: temparature,
@@ -165,15 +169,15 @@ function sendtoFirebase (nodeName, date, time) {
   }
   if (check) {
     if(humanity !== "ron" && temparature !== "Wrong"){
-      firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
+      firebase.database().ref('db/'+firebaseKey).update({
         temparature: temparatureData,
       })
     }
-    firebase.database().ref('db/-L46xegEleuKcTnJXDjg').update({
+    firebase.database().ref('db/'+firebaseKey).update({
       ip: ipNow,
       onlinenow: online
     })
-    firebase.database().ref('alive/-L46xegEleuKcTnJXDjg').update({
+    firebase.database().ref('alive/'+firebaseKey).update({
       nodeName:nodeName,
       alive:true,
       alive2:true
@@ -420,7 +424,7 @@ function getMIB (nodeName, date, time) {
     }
   })
 
-  let check = db.child('-L46xegEleuKcTnJXDjg')
+  let check = db.child(firebaseKey)
   if (check) {
     let memoryFree = (memory*100)/128
     let data = {}
@@ -449,14 +453,14 @@ function getMIB (nodeName, date, time) {
       for (let i = 64; i <= 67; i++) {
         sumInterface += intSpd[i].intSpd/1048576
       }
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/sumInterface').set(sumInterface)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/inbound').push(insertIn)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/outbound').push(insertOut)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/packetloss').set(packetloss)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/mainlink').set(data)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/cpu').set(cpu)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/memory').set(memoryFree)
-      firebase.database().ref().child('db/-L46xegEleuKcTnJXDjg/iplist').set(iplist)
+      firebase.database().ref().child('db/'+firebaseKey+'/sumInterface').set(sumInterface)
+      firebase.database().ref().child('db/'+firebaseKey+'/inbound').push(insertIn)
+      firebase.database().ref().child('db/'+firebaseKey+'/outbound').push(insertOut)
+      firebase.database().ref().child('db/'+firebaseKey+'/packetloss').set(packetloss)
+      firebase.database().ref().child('db/'+firebaseKey+'/mainlink').set(data)
+      firebase.database().ref().child('db/'+firebaseKey+'/cpu').set(cpu)
+      firebase.database().ref().child('db/'+firebaseKey+'/memory').set(memoryFree)
+      firebase.database().ref().child('db/'+firebaseKey+'/iplist').set(iplist)
     }, 9000)
       
    
