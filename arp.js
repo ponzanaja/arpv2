@@ -95,7 +95,7 @@ setInterval(() => {
             })
             flagSend = true
           })
-    }else if(minutes !== fixTime && flagSend){
+    }else if(minutes !== fixTime){
         flagSend = false
     }
 },30000)
