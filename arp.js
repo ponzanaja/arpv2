@@ -76,7 +76,7 @@ setInterval(() => {
     let now = new Date()
     let date = dateFormat(now, 'd/m/yyyy')
     let time = dateFormat(now, 'HH:MM:ss')
-    let minutes = now.getminutes()
+    let minutes = now.getMinutes()
     if(minutes === fixTime && !(flagSend)){
         speedTest().then((result) => {
             let newResult = result.replace(/(\r\n|\n|\r)/gm, '')
